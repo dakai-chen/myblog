@@ -87,15 +87,22 @@ pub async fn update_article(bo: UpdateArticleBo, db: &mut DbConn) -> Result<(), 
 
     let now = UnixTimestampSecs::now().as_i64();
 
-    if article.markdown_content != bo.markdown_content {
+    let content_changed = article.markdown_content != bo.markdown_content;
+    let title_changed = article.title != bo.title;
+
+    if content_changed {
         article.plain_content = clean_markdown_content(&bo.markdown_content);
         article.excerpt = truncate_excerpt(&article.plain_content);
     }
+
+    if content_changed || title_changed {
+        article.updated_at = now;
+    }
+
     article.title = bo.title;
     article.markdown_content = bo.markdown_content;
     article.password = bo.password;
     article.status = bo.status;
-    article.updated_at = now;
     article.published_at = match article.published_at {
         Some(published_at) => Some(published_at),
         None => match bo.status {
