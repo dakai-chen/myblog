@@ -436,19 +436,17 @@ a.btn:active {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
     border-bottom: var(--blog-border-size) solid black;
 }
 
 .article .article-title {
     word-break: break-all;
-    text-align: center;
 }
 
 .article .article-metadata {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 0.75rem;
     align-items: center;
     margin-top: 0.5rem;

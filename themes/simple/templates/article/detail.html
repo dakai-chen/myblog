@@ -25,15 +25,21 @@
         </h1>
         <div class="article-metadata">
             {% if context.published_at %}
-            <div class="article-metadata-item">
-                <img src="/theme/assets/image/time.svg" alt="文章发布时间">
+            <div class="article-metadata-item" title="发布时间">
+                <img src="/theme/assets/image/published.svg" alt="发布时间">
                 <span>
                     {{ context.published_at | date(format="%Y-%m-%d %H:%M", timezone="Asia/Shanghai") }}
                 </span>
             </div>
             {% endif %}
-            <div class="article-metadata-item">
-                <img src="/theme/assets/image/read.svg" alt="文章浏览量">
+            <div class="article-metadata-item" title="更新时间">
+                <img src="/theme/assets/image/updated.svg" alt="更新时间">
+                <span>
+                    {{ context.updated_at | date(format="%Y-%m-%d %H:%M", timezone="Asia/Shanghai") }}
+                </span>
+            </div>
+            <div class="article-metadata-item" title="阅读量">
+                <img src="/theme/assets/image/read.svg" alt="阅读量">
                 <span>{{ context.uv | human_number(decimals=2) }}</span>
             </div>
         </div>
