@@ -63,6 +63,7 @@ pub async fn create_article(bo: CreateArticleBo, db: &mut DbConn) -> Result<Arti
             updated_at: now,
             published_at: match bo.status {
                 ArticleStatus::Draft => None,
+                ArticleStatus::Private => Some(now),
                 ArticleStatus::Published => Some(now),
             },
         };
@@ -103,12 +104,11 @@ pub async fn update_article(bo: UpdateArticleBo, db: &mut DbConn) -> Result<(), 
     article.markdown_content = bo.markdown_content;
     article.password = bo.password;
     article.status = bo.status;
-    article.published_at = match article.published_at {
-        Some(published_at) => Some(published_at),
-        None => match bo.status {
-            ArticleStatus::Draft => None,
-            ArticleStatus::Published => Some(now),
-        },
+    article.published_at = match bo.status {
+        ArticleStatus::Draft => None,
+        ArticleStatus::Private | ArticleStatus::Published => {
+            Some(article.published_at.unwrap_or(now))
+        }
     };
 
     crate::storage::db::article::update(&article, db).await?;
@@ -186,7 +186,7 @@ pub async fn get_article(
     let Some(article) = crate::storage::db::article::find(&bo.article_id, db).await? else {
         return Ok(None);
     };
-    if admin.is_none() && !bo.ignore_status && article.status == ArticleStatus::Draft {
+    if admin.is_none() && !bo.ignore_status && article.status != ArticleStatus::Published {
         return Ok(None);
     };
     if admin.is_none() && article.password.is_some() && !visitor.has_article(&article.id).await? {

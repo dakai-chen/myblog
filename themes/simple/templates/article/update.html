@@ -40,13 +40,34 @@
                 <label for="radio_status_draft">草稿</label>
             </div>
             <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_private" value="private">
+                <label for="radio_status_private">私密</label>
+            </div>
+            <div class="form-radio-group-item">
                 <input type="radio" name="status" id="radio_status_published" value="published" checked>
+                <label for="radio_status_published">发布</label>
+            </div>
+            {% elif context.status == "private" %}
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_draft" value="draft">
+                <label for="radio_status_draft">草稿</label>
+            </div>
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_private" value="private" checked>
+                <label for="radio_status_private">私密</label>
+            </div>
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_published" value="published">
                 <label for="radio_status_published">发布</label>
             </div>
             {% else %}
             <div class="form-radio-group-item">
                 <input type="radio" name="status" id="radio_status_draft" value="draft" checked>
                 <label for="radio_status_draft">草稿</label>
+            </div>
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_private" value="private">
+                <label for="radio_status_private">私密</label>
             </div>
             <div class="form-radio-group-item">
                 <input type="radio" name="status" id="radio_status_published" value="published">
