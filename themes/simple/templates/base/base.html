@@ -1,3 +1,5 @@
+{% import "base/footer.html" as footer %}
+
 <!doctype html>
 <html lang="zh-CN">
 
@@ -57,7 +59,9 @@
         </main>
         <!-- 底部 -->
         <footer>
-            {% block footer %}{% endblock footer %}
+            {% block footer %}
+            {{ footer::default() }}
+            {% endblock footer %}
         </footer>
         <!-- 消息提示框 -->
         <div class="tips"></div>
