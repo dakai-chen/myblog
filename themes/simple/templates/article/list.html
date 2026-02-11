@@ -1,4 +1,4 @@
-{% extends "base/base_admin.html" %}
+{% extends "base/base.html" %}
 
 {% block breadcrumb %}
 <li><a href="/">首页</a></li>
@@ -26,7 +26,9 @@
         {% if article.status == "published" %}
         <a class="article-title" href="/articles/{{ article.article_id }}" rel="nofollow">{{ article.title }}</a>
         {% else %}
-        <a class="article-title a-article-hide" href="/articles/{{ article.article_id }}" rel="nofollow">{{ article.title }}</a>
+        <a class="article-title a-article-hide" href="/articles/{{ article.article_id }}" rel="nofollow">
+            {{ article.title }}
+        </a>
         {% endif %}
         {% else %}
         {% if article.status == "published" %}

@@ -1,4 +1,4 @@
-{% extends "base/base_admin.html" %}
+{% extends "base/base.html" %}
 
 {% block title %}关于{% endblock title %}
 
@@ -35,6 +35,7 @@
 {% endblock main %}
 
 {% block scripts %}
+{{ super() }}
 <script>
     document.addEventListener('DOMContentLoaded', init_code_copy_btn);
 </script>

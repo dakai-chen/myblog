@@ -1,7 +1,8 @@
 {% import "base/macros.html" as macros %}
-{% extends "base/base_admin.html" %}
+{% extends "base/base.html" %}
 
 {% block meta %}
+{{ super() }}
 {% if context.need_password %}
 <meta name="robots" content="noindex,nofollow">
 {% endif %}
@@ -89,6 +90,7 @@
 {% endblock main %}
 
 {% block scripts %}
+{{ super() }}
 <script>
     modal_register("#modal_delete_article", {
         on_confirm: (_, id) => {

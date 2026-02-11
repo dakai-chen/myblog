@@ -1,6 +1,7 @@
-{% extends "base/base_admin.html" %}
+{% extends "base/base.html" %}
 
 {% block meta %}
+{{ super() }}
 <meta name="robots" content="noindex,nofollow">
 {% endblock meta %}
 
@@ -27,6 +28,7 @@
 {% endblock main %}
 
 {% block scripts %}
+{{ super() }}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // 1. 获取 URL 中的查询参数

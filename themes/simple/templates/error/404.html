@@ -5,6 +5,12 @@
 <li><span>错误</span></li>
 {% endblock breadcrumb %}
 
+{% block menu %}
+{% block common_menu %}
+{{ super() }}
+{% endblock common_menu %}
+{% endblock menu %}
+
 {% block main %}
 <div class="alert">
     <h2>404</h2>

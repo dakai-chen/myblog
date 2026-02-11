@@ -2,18 +2,20 @@
 <html lang="zh-CN">
 
 <head>
+    {% block meta %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% block meta %}{% endblock meta %}
+    {% endblock meta %}
     <link rel="icon" href="{{ config.theme.extensions.favicon_ico }}">
     <link rel="alternate" type="application/rss+xml" title="{{ config.theme.extensions.title }}" href="/rss">
     <title>{% block title %}{{ config.theme.extensions.title }}{% endblock title %}</title>
     <!-- 样式 -->
+    {% block styles %}
     <link href="/theme/assets/styles/blog-var.css" rel="stylesheet">
     <link href="/theme/assets/styles/blog-font.css" rel="stylesheet">
     <link href="/theme/assets/styles/blog.css" rel="stylesheet">
     <link href="/theme/assets/styles/blog-markdown.css" rel="stylesheet">
-    {% block styles %}{% endblock styles %}
+    {% endblock styles %}
 </head>
 
 <body>
@@ -34,8 +36,18 @@
                 </nav>
                 <!-- 菜单 -->
                 <ul class="menu">
+                    {% block menu %}
+                    {% block common_menu %}
                     <li><a href="/rss">RSS</a></li>
-                    {% block menu %}{% endblock menu %}
+                    {% endblock common_menu %}
+                    {% if admin %}
+                    {% block admin_menu %}{% endblock admin_menu %}
+                    <li><a href="/logout">登出</a></li>
+                    <li><span class="disabled">管理员</span></li>
+                    {% else %}
+                    <li><a href="/login">登录</a></li>
+                    {% endif %}
+                    {% endblock menu %}
                 </ul>
             </div>
         </header>
@@ -51,6 +63,7 @@
         <div class="tips"></div>
     </div>
     <!-- 脚本 -->
+    {% block scripts %}
     <script src="/theme/assets/scripts/blog-util.js"></script>
     <script src="/theme/assets/scripts/blog-api.js"></script>
     <script src="/theme/assets/scripts/blog-tips.js"></script>
@@ -58,7 +71,7 @@
     <script src="/theme/assets/scripts/blog-pagination.js"></script>
     <script src="/theme/assets/scripts/blog-upload.js"></script>
     <script src="/theme/assets/scripts/blog-markdown.js"></script>
-    {% block scripts %}{% endblock scripts %}
+    {% endblock scripts %}
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 {% import "base/macros.html" as macros %}
-{% extends "base/base_admin.html" %}
+{% extends "base/base.html" %}
 
 {% block breadcrumb %}
 <li><a href="/">首页</a></li>
@@ -83,6 +83,7 @@
 {% endblock main %}
 
 {% block scripts %}
+{{ super() }}
 <script>
     modal_upload_file_register("#modal_upload_file", (modal, name, file) => {
         api_upload_resource(name, file, (response) => {
