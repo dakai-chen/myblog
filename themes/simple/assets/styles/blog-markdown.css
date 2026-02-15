@@ -1,3 +1,11 @@
+.markdown {
+    word-break: keep-all;
+}
+
+.markdown * {
+    word-break: keep-all;
+}
+
 .markdown>*:first-child {
     margin-top: 0 !important;
 }
