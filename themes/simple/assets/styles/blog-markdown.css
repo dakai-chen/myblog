@@ -1,9 +1,9 @@
 .markdown {
-    word-break: keep-all;
+    word-break: break-word;
 }
 
 .markdown * {
-    word-break: keep-all;
+    word-break: break-word;
 }
 
 .markdown>*:first-child {
