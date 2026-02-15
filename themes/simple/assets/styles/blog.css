@@ -492,7 +492,7 @@ a.btn:active {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding: 1rem 0.5rem 0 0.5rem;
+    padding-top: 1rem;
     max-width: 100%;
     font-size: 0.875rem;
     margin-top: 1rem;
@@ -501,7 +501,7 @@ a.btn:active {
 
 .article-attachment-list .article-attachment-item {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
     gap: 1rem;
     padding: 0.5rem 0.75rem;
@@ -523,10 +523,10 @@ a.btn:active {
 
 .article-attachment-item .article-attachment-exts {
     display: flex;
+    gap: 0.75rem;
 }
 
 .article-attachment-exts .article-attachment-size {
-    margin-right: 0.25rem;
     white-space: nowrap;
 }
 
