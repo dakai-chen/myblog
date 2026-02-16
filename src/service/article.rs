@@ -14,7 +14,7 @@ use crate::model::bo::article::{
 use crate::model::bo::auth::AdminBo;
 use crate::model::bo::resource::{RemoveResourceBo, UploadResourceOptionsBo};
 use crate::model::bo::visitor::VisitorBo;
-use crate::model::co::article::VisitorArticleAccessRecordCo;
+use crate::model::co::article::{VisitorArticleAccessRecordCo, VisitorArticleAccessRecordCoIdGen};
 use crate::model::common::article::ArticleStatus;
 use crate::model::po::article::{ArticlePo, SearchArticle};
 use crate::model::po::article_attachment::ArticleAttachmentPo;
@@ -373,11 +373,11 @@ async fn update_article_visit_stats(
     visitor: &VisitorBo,
     db: &mut DbConn,
 ) -> Result<(), AppError> {
-    let cache_data = VisitorArticleAccessRecordCo {
-        visitor_id: visitor.visitor_id().into(),
-        article_id: article.id.as_str().into(),
+    let cache_id = VisitorArticleAccessRecordCoIdGen {
+        visitor_id: visitor.visitor_id(),
+        article_id: article.id.as_str(),
     };
-    let cache = cache_data.with_ttl(Duration::from_secs(3600 * 24));
+    let cache = VisitorArticleAccessRecordCo.with_ttl(cache_id, Duration::from_secs(3600 * 24));
     let uv_add = match cache.set(CacheSetMode::OnlyIfNotExists).await? {
         true => 1,
         false => 0,

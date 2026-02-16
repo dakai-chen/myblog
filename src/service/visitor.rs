@@ -13,7 +13,7 @@ pub async fn create() -> Result<String, AppError> {
     let data = VisitorCo {
         visitor_id: crate::util::uuid::v4(),
     };
-    let visitor = data.with_ttl(VISITOR_TTL);
+    let visitor = data.gen_id_with_ttl(VISITOR_TTL);
     if !visitor.set(CacheSetMode::OnlyIfNotExists).await? {
         return Err(AppErrorMeta::Internal.with_context(format!(
             "创建访客失败，访客ID已存在。访客ID: {}",

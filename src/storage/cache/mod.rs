@@ -23,23 +23,54 @@ pub struct Cache<T> {
     pub data: T,
 }
 
-pub trait CacheData: DeserializeOwned + Serialize + Send + Sync {
-    fn kind() -> &'static str;
+pub trait CacheIdGenerator {
+    fn generate_id(&self) -> Cow<'_, str>;
+}
 
+impl<G: ?Sized + CacheIdGenerator> CacheIdGenerator for &G {
     fn generate_id(&self) -> Cow<'_, str> {
-        crate::util::uuid::v4().into()
-    }
-
-    fn with_ttl(self, ttl: Duration) -> Cache<Self> {
-        Cache::with_ttl(self, ttl)
+        G::generate_id(self)
     }
 }
 
-impl<T> Cache<T>
-where
-    T: CacheData,
-{
-    pub fn new(data: T, created_at: i64, expires_at: i64) -> Self {
+impl CacheIdGenerator for str {
+    fn generate_id(&self) -> Cow<'_, str> {
+        self.into()
+    }
+}
+
+impl CacheIdGenerator for String {
+    fn generate_id(&self) -> Cow<'_, str> {
+        self.into()
+    }
+}
+
+impl CacheIdGenerator for Cow<'_, str> {
+    fn generate_id(&self) -> Cow<'_, str> {
+        self.as_ref().into()
+    }
+}
+
+pub trait CacheData: DeserializeOwned + Serialize + Send + Sync {
+    fn kind() -> &'static str;
+
+    fn with_ttl<G>(self, id: G, ttl: Duration) -> Cache<Self>
+    where
+        G: CacheIdGenerator,
+    {
+        Cache::with_ttl(id, self, ttl)
+    }
+
+    fn gen_id_with_ttl(self, ttl: Duration) -> Cache<Self>
+    where
+        Self: CacheIdGenerator,
+    {
+        Cache::gen_id_with_ttl(self, ttl)
+    }
+}
+
+impl<T: CacheData + CacheIdGenerator> Cache<T> {
+    pub fn gen_id_new(data: T, created_at: i64, expires_at: i64) -> Self {
         Self {
             id: data.generate_id().into_owned(),
             created_at,
@@ -49,9 +80,32 @@ where
         }
     }
 
-    pub fn with_ttl(data: T, ttl: Duration) -> Self {
+    pub fn gen_id_with_ttl(data: T, ttl: Duration) -> Self {
         let now = UnixTimestampSecs::now();
-        Self::new(data, now.as_i64(), now.add(ttl).as_i64())
+        Self::gen_id_new(data, now.as_i64(), now.add(ttl).as_i64())
+    }
+}
+
+impl<T: CacheData> Cache<T> {
+    pub fn new<G>(id: G, data: T, created_at: i64, expires_at: i64) -> Self
+    where
+        G: CacheIdGenerator,
+    {
+        Self {
+            id: id.generate_id().into_owned(),
+            created_at,
+            expires_at,
+            kind: T::kind().to_owned(),
+            data,
+        }
+    }
+
+    pub fn with_ttl<G>(id: G, data: T, ttl: Duration) -> Self
+    where
+        G: CacheIdGenerator,
+    {
+        let now = UnixTimestampSecs::now();
+        Self::new(id, data, now.as_i64(), now.add(ttl).as_i64())
     }
 
     pub async fn get_in<S>(id: &str, storage: &S) -> anyhow::Result<Option<Self>>

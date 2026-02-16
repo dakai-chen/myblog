@@ -9,10 +9,10 @@ use serde::{Deserialize, Serialize};
 use crate::context::ip::ClientIP;
 use crate::context::visitor::VisitorId;
 use crate::error::{AppError, AppErrorMeta};
-use crate::model::co::article::VisitorArticleAccessPermitCo;
+use crate::model::co::article::{VisitorArticleAccessPermitCo, VisitorArticleAccessPermitCoIdGen};
 use crate::model::co::visitor::VisitorCo;
 use crate::storage::cache::storage::CacheSetMode;
-use crate::storage::cache::{Cache, CacheData};
+use crate::storage::cache::{Cache, CacheData, CacheIdGenerator};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct VisitorBo {
@@ -93,27 +93,28 @@ impl<'a> VisitorArticleAccessPermitBo<'a> {
     }
 
     pub async fn add_article(&self, article_id: &str) -> anyhow::Result<()> {
-        let data = VisitorArticleAccessPermitCo {
+        let cache_id = VisitorArticleAccessPermitCoIdGen {
             visitor_id: self.visitor_id.as_ref().into(),
             article_id: article_id.into(),
         };
-        let permit = data.with_ttl(crate::config::get().article.access_access_ttl);
+        let permit = VisitorArticleAccessPermitCo
+            .with_ttl(&cache_id, crate::config::get().article.access_access_ttl);
         if !permit.set(CacheSetMode::Overwrite).await? {
             return Err(anyhow::anyhow!(
                 "添加文章访问许可失败，缓存设置操作未成功执行。访客ID: {}, 文章ID: {}",
-                permit.data.visitor_id,
-                permit.data.article_id,
+                cache_id.visitor_id,
+                cache_id.article_id,
             ));
         }
         Ok(())
     }
 
     pub async fn has_article(&self, article_id: &str) -> anyhow::Result<bool> {
-        let data = VisitorArticleAccessPermitCo {
-            visitor_id: self.visitor_id.as_ref().into(),
-            article_id: article_id.into(),
+        let cache_id = VisitorArticleAccessPermitCoIdGen {
+            visitor_id: self.visitor_id.as_ref(),
+            article_id: article_id,
         };
-        Cache::<VisitorArticleAccessPermitCo>::exists(data.generate_id().as_ref()).await
+        Cache::<VisitorArticleAccessPermitCo>::exists(cache_id.generate_id().as_ref()).await
     }
 
     pub async fn clear_article(&self) -> anyhow::Result<()> {
