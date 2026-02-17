@@ -145,6 +145,12 @@ enabled = true
 # 日程表达式
 schedule = "*/30 * * * * *"
 
+[cron.tasks.prune_db_table_article_unlock_try_count]
+# 启用定时任务
+enabled = true
+# 日程表达式
+schedule = "*/30 * * * * *"
+
 # ------------------------------------------------------------------------------
 # 文章配置
 # ------------------------------------------------------------------------------
@@ -159,6 +165,12 @@ title_max_size = "120"
 excerpt_max_size = "600"
 # 文章正文最大长度限制
 content_max_size = "2MiB"
+# 文章解锁尝试次数统计的时间窗口
+unlock_try_window = "5m"
+# 文章解锁时间窗口内允许的最大尝试次数
+unlock_try_max_times = 2
+# 文章解锁尝试次数超限后的封禁时长
+unlock_ban_ttl = "10m"
 # 作为 About 页面的文章
 # about_article_id = ""
 

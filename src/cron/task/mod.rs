@@ -1,3 +1,4 @@
+mod article;
 mod cache;
 
 use std::sync::Arc;
@@ -7,7 +8,9 @@ use crate::cron::core::task_function_name;
 use crate::state::AppState;
 
 pub fn build(state: Arc<AppState>) -> anyhow::Result<CronTaskCollector<Arc<AppState>>> {
-    CronTaskCollector::new(state).config_add(cache::prune_db_table_cache)
+    CronTaskCollector::new(state)
+        .config_add(cache::prune_db_table_cache)?
+        .config_add(article::prune_db_table_article_unlock_try_count)
 }
 
 impl CronTaskCollector<Arc<AppState>> {

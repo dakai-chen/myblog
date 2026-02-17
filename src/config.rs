@@ -317,6 +317,14 @@ pub struct ArticleConfig {
     /// 文章正文最大长度限制
     #[serde(default, with = "crate::util::serde::human_size")]
     pub content_max_size: usize,
+    /// 文章解锁尝试次数统计的时间窗口
+    #[serde(with = "humantime_serde")]
+    pub unlock_try_window: Duration,
+    /// 文章解锁时间窗口内允许的最大尝试次数
+    pub unlock_try_max_times: u32,
+    /// 文章解锁尝试次数超限后的封禁时长
+    #[serde(with = "humantime_serde")]
+    pub unlock_ban_ttl: Duration,
     /// 作为 About 页面的文章
     #[serde(default)]
     pub about_article_id: Option<String>,

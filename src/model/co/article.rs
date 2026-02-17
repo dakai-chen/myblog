@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::net::IpAddr;
 
 use serde::{Deserialize, Serialize};
 
@@ -47,5 +48,28 @@ pub struct VisitorArticleAccessRecordCo;
 impl CacheData for VisitorArticleAccessRecordCo {
     fn kind() -> &'static str {
         "visitor_article_access_record"
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ArticleUnlockBanCoIdGen<'a> {
+    /// IP
+    pub ip: IpAddr,
+    /// 文章ID
+    pub article_id: &'a str,
+}
+
+impl CacheIdGenerator for ArticleUnlockBanCoIdGen<'_> {
+    fn generate_id(&self) -> Cow<'_, str> {
+        format!("{}:{}", self.ip, self.article_id).into()
+    }
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ArticleUnlockBanCo;
+
+impl CacheData for ArticleUnlockBanCo {
+    fn kind() -> &'static str {
+        "article_unlock_ban"
     }
 }

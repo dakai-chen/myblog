@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::net::IpAddr;
 use std::sync::LazyLock;
 use std::time::Duration;
 
@@ -14,18 +15,36 @@ use crate::model::bo::article::{
 use crate::model::bo::auth::AdminBo;
 use crate::model::bo::resource::{RemoveResourceBo, UploadResourceOptionsBo};
 use crate::model::bo::visitor::VisitorBo;
-use crate::model::co::article::{VisitorArticleAccessRecordCo, VisitorArticleAccessRecordCoIdGen};
+use crate::model::co::article::{
+    ArticleUnlockBanCo, ArticleUnlockBanCoIdGen, VisitorArticleAccessRecordCo,
+    VisitorArticleAccessRecordCoIdGen,
+};
 use crate::model::common::article::ArticleStatus;
 use crate::model::po::article::{ArticlePo, SearchArticle};
 use crate::model::po::article_attachment::ArticleAttachmentPo;
 use crate::model::po::article_stats::ArticleStatsPo;
+use crate::model::po::article_unlock_try_count::ArticleUnlockTryCountPo;
 use crate::model::po::resource::ResourcePo;
-use crate::storage::cache::CacheData;
 use crate::storage::cache::storage::CacheSetMode;
+use crate::storage::cache::{Cache, CacheData, CacheIdGenerator};
 use crate::storage::db::DbConn;
 use crate::util::join::HashJoin;
 use crate::util::pagination::PageData;
 use crate::util::time::UnixTimestampSecs;
+
+async fn unlock_ban(ip: IpAddr, article_id: &str) -> Result<(), AppError> {
+    let id = ArticleUnlockBanCoIdGen { ip, article_id };
+    let co = ArticleUnlockBanCo.with_ttl(id, crate::config::get().article.unlock_ban_ttl);
+    co.set(CacheSetMode::Overwrite).await?;
+    Ok(())
+}
+
+async fn unlock_ban_exists(ip: IpAddr, article_id: &str) -> Result<bool, AppError> {
+    let id = ArticleUnlockBanCoIdGen { ip, article_id };
+    Cache::<ArticleUnlockBanCo>::exists(id.generate_id().as_ref())
+        .await
+        .map_err(From::from)
+}
 
 /// 解锁文章（获取访问令牌）
 pub async fn unlock_article(
@@ -39,8 +58,44 @@ pub async fn unlock_article(
     let Some(password) = article.password else {
         return Err(AppErrorMeta::BadRequest.with_message("该文章无需密码进行访问"));
     };
+
+    if unlock_ban_exists(visitor.ip(), &bo.article_id).await? {
+        return Err(AppErrorMeta::BadRequest.with_message("文章解锁尝试次数过多，请稍后再试"));
+    }
+
     if bo.password != password {
-        return Err(AppErrorMeta::BadRequest.with_message("文章访问密码错误"));
+        let now = UnixTimestampSecs::now();
+        let po = ArticleUnlockTryCountPo {
+            ip: visitor.ip().to_string(),
+            article_id: article.id,
+            count: 1,
+            created_at: now.as_i64(),
+            expires_at: now
+                .add(crate::config::get().article.unlock_try_window)
+                .as_i64(),
+        };
+        crate::storage::db::article_unlock_try_count::remove_single_expired(
+            &po.ip,
+            &po.article_id,
+            db,
+        )
+        .await?;
+        let count = crate::storage::db::article_unlock_try_count::incr_count(&po, db).await?;
+
+        // 计算剩余次数
+        let remaining_times = crate::config::get()
+            .article
+            .unlock_try_max_times
+            .saturating_sub(count);
+
+        if remaining_times == 0 {
+            unlock_ban(visitor.ip(), &bo.article_id).await?;
+            return Err(AppErrorMeta::BadRequest.with_message("文章解锁尝试次数过多，请稍后再试"));
+        } else {
+            return Err(AppErrorMeta::BadRequest.with_message(format!(
+                "文章访问密码错误！剩余尝试次数 {remaining_times} 次"
+            )));
+        }
     }
     visitor.add_article(&article.id).await?;
     Ok(())
