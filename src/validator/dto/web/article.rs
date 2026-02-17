@@ -27,8 +27,8 @@ impl Validation<()> for UnlockArticleDto {
         if self.article_id.is_empty() {
             return Err(ValidationError::validation("文章ID不能为空"));
         }
-        if crate::validator::common::article::validate_unlock_password(&self.password).is_err() {
-            return Err(ValidationError::validation("文章访问密码错误"));
+        if self.password.len() > 32 {
+            return Err(ValidationError::validation("文章访问密码太长"));
         }
         Ok(())
     }
