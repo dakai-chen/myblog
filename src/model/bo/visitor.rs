@@ -99,13 +99,7 @@ impl<'a> VisitorArticleAccessPermitBo<'a> {
         };
         let permit = VisitorArticleAccessPermitCo
             .with_ttl(&cache_id, crate::config::get().article.access_access_ttl);
-        if !permit.set(CacheSetMode::Overwrite).await? {
-            return Err(anyhow::anyhow!(
-                "添加文章访问许可失败，缓存设置操作未成功执行。访客ID: {}, 文章ID: {}",
-                cache_id.visitor_id,
-                cache_id.article_id,
-            ));
-        }
+        permit.set(CacheSetMode::Overwrite).await?;
         Ok(())
     }
 
