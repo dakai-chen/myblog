@@ -39,8 +39,8 @@ max_keep_files = 7
 default_limit = "2MiB"
 # 自定义请求体大小限制规则列表
 rules = [
-    { path = "/resource/upload", method = "POST", limit = "2GiB" },
-    { path = "/article/upload_attachment", method = "POST", limit = "2GiB" },
+    { path = "/api/resource/upload", method = "POST", limit = "2GiB" },
+    { path = "/api/article/upload_attachment", method = "POST", limit = "2GiB" },
 ]
 
 # ------------------------------------------------------------------------------
