@@ -160,10 +160,10 @@ access_access_ttl = "1h"
 # 全文搜索匹配结果最大输出条目
 full_text_search_limit = 100
 # 文章标题最大长度限制
-title_max_size = "120"
+title_max_size = 40
 # 文章摘要最大长度限制
-excerpt_max_size = "600"
-# 文章正文最大长度限制
+excerpt_max_size = 200
+# 文章正文最大字节限制
 content_max_size = "2MiB"
 # 文章解锁尝试次数统计的时间窗口
 unlock_try_window = "10m"

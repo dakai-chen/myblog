@@ -24,10 +24,11 @@ pub fn validate_title(title: &str) -> Result<(), ValidationError> {
     if title.trim().is_empty() {
         return Err(ValidationError::validation("文章标题不能为空或仅包含空格"));
     }
-    if title.len() > crate::config::get().article.title_max_size {
+    let len = title.chars().count();
+    if len > crate::config::get().article.title_max_length {
         return Err(ValidationError::validation(format!(
-            "文章标题长度超出限制，最大允许 {} 字节",
-            crate::config::get().article.title_max_size
+            "文章标题长度超出限制，最大允许 {} 个字符",
+            crate::config::get().article.title_max_length
         )));
     }
     Ok(())
@@ -46,8 +47,11 @@ pub fn validate_markdown_content(markdown_content: &str) -> Result<(), Validatio
 }
 
 pub fn validate_full_text(full_text: &str) -> Result<(), ValidationError> {
-    if full_text.len() > 200 {
-        return Err(ValidationError::validation("搜索内容长度不能超过200字符"));
+    let len = full_text.chars().count();
+    if len > 200 {
+        return Err(ValidationError::validation(
+            "搜索内容长度不能超过 200 个字符",
+        ));
     }
     Ok(())
 }

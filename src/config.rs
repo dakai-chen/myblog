@@ -309,12 +309,10 @@ pub struct ArticleConfig {
     /// 全文搜索匹配结果最大输出条目
     pub full_text_search_limit: u64,
     /// 文章标题最大长度限制
-    #[serde(default, with = "crate::util::serde::human_size")]
-    pub title_max_size: usize,
+    pub title_max_length: usize,
     /// 文章摘要最大长度限制
-    #[serde(default, with = "crate::util::serde::human_size")]
-    pub excerpt_max_size: usize,
-    /// 文章正文最大长度限制
+    pub excerpt_max_length: usize,
+    /// 文章正文最大字节限制
     #[serde(default, with = "crate::util::serde::human_size")]
     pub content_max_size: usize,
     /// 文章解锁尝试次数统计的时间窗口

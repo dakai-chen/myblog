@@ -460,6 +460,6 @@ fn clean_markdown_content(markdown: &str) -> String {
 fn truncate_excerpt(plain_content: &str) -> String {
     plain_content
         .chars()
-        .take(crate::config::get().article.excerpt_max_size)
+        .take(crate::config::get().article.excerpt_max_length)
         .collect()
 }
