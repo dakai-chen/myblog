@@ -2,8 +2,7 @@ use std::sync::Arc;
 
 use boluo::BoxError;
 use boluo::data::{Extension, Form};
-use boluo::extract::{Path, TypedHeader};
-use boluo::headers::Referer;
+use boluo::extract::Path;
 use boluo::response::{Html, IntoResponse, Redirect};
 
 use crate::context::auth::AdminFromCookie;
@@ -59,14 +58,14 @@ pub async fn detail(
 
 #[boluo::route("/articles/{article_id}/_unlock", method = ["POST"])]
 pub async fn unlock(
-    TypedHeader(referer): TypedHeader<Referer>,
     visitor: VisitorBo,
     params: UnlockArticleDto,
     DbPoolConnection(mut db): DbPoolConnection,
 ) -> Result<impl IntoResponse, BoxError> {
+    let url = format!("/articles/{}", params.article_id);
     params.validate(&())?;
     crate::service::article::unlock_article(&visitor, &params.into(), &mut db).await?;
-    Ok(Redirect::to(&referer.to_string()))
+    Ok(Redirect::to(&url))
 }
 
 #[boluo::route("/articles/_create", method = ["GET"])]
