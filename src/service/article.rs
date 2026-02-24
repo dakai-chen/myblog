@@ -383,8 +383,11 @@ async fn list_attachment(
     article_id: &str,
     db: &mut DbConn,
 ) -> Result<Vec<ArticleAttachmentBo>, AppError> {
-    let attachments =
+    let mut attachments =
         crate::storage::db::article_attachment::list_by_article_id(article_id, db).await?;
+
+    attachments.sort_by(|a, b| b.created_at.cmp(&a.created_at));
+
     let resources = crate::storage::db::resource::list_by_ids(
         &attachments
             .iter()
