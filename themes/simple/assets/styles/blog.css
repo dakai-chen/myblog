@@ -452,7 +452,6 @@ a.btn:active {
 .article .article-header {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
 }
 
 .article .article-title {
@@ -498,6 +497,7 @@ a.btn:active {
 }
 
 .article .article-main {
+    margin-top: 1rem;
     word-break: break-all;
 }
 

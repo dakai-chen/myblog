@@ -141,6 +141,14 @@
     opacity: 0.6;
 }
 
+.markdown blockquote>p:first-child {
+    margin-top: 0 !important;
+}
+
+.markdown blockquote>p:last-child {
+    margin-bottom: 0 !important;
+}
+
 .markdown blockquote blockquote {
     padding-right: 0;
 }
