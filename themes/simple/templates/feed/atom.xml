@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>{{ config.theme.extensions.title }}</title>
-    <icon>{{ config.theme.extensions.favicon_ico }}</icon>
+    <icon>{{ config.theme.extensions.base_url }}{{ config.theme.extensions.favicon_ico }}</icon>
     <link href="{{ config.theme.extensions.base_url }}/atom.xml" rel="self"/>
     <link href="{{ config.theme.extensions.base_url }}"/>
     <id>{{ config.theme.extensions.base_url }}/atom.xml</id>
