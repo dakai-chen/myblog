@@ -179,8 +179,22 @@ a.btn:active {
  ******************************************************************************/
 
 .logo {
-    text-align: center;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
     margin-bottom: 1rem;
+    font-weight: bold;
+    font-size: 1.75rem;
+    align-items: center;
+    gap: 1rem;
+    border: 2px solid black;
+    padding: 0.5rem 0;
+    background-color: #f8f8f8;
+}
+
+.logo>img {
+    height: 1.75rem;
+    vertical-align: middle;
 }
 
 /*******************************************************************************
