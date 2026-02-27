@@ -137,9 +137,9 @@
 }
 
 .markdown blockquote {
-    border-left: 0.25rem solid #777777;
+    border-left: 0.25rem solid #ddd;
     padding: 0 1rem;
-    opacity: 0.6;
+    color: #888;
 }
 
 .markdown blockquote>p:first-child {
@@ -148,6 +148,22 @@
 
 .markdown blockquote>p:last-child {
     margin-bottom: 0 !important;
+}
+
+.markdown blockquote p,
+.markdown blockquote span,
+.markdown blockquote strong,
+.markdown blockquote b,
+.markdown blockquote em,
+.markdown blockquote i,
+.markdown blockquote a,
+.markdown blockquote code,
+.markdown blockquote pre {
+    color: inherit !important;
+}
+
+.markdown blockquote a {
+    color: #5588dd !important;
 }
 
 .markdown blockquote blockquote {
