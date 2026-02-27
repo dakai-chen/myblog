@@ -182,7 +182,7 @@ a.btn:active {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-weight: bold;
     font-size: 1.75rem;
     align-items: center;
@@ -412,15 +412,13 @@ a.btn:active {
     display: flex;
     flex-direction: column;
     margin-top: 1rem;
+    gap: 0.5rem;
+    line-height: 1.5;
 }
 
 .article-list>li {
     display: flex;
     align-items: center;
-}
-
-.article-list>li:not(:first-child) {
-    margin-top: 0.5rem;
 }
 
 .article-list .article-lock {
