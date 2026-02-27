@@ -55,6 +55,15 @@
     font-size: 1rem;
 }
 
+.markdown h1 .anchor,
+.markdown h2 .anchor,
+.markdown h3 .anchor,
+.markdown h4 .anchor,
+.markdown h5 .anchor,
+.markdown h6 .anchor {
+    margin-right: 0.75rem;
+}
+
 .markdown h1 .anchor::before,
 .markdown h2 .anchor::before,
 .markdown h3 .anchor::before,
@@ -62,7 +71,6 @@
 .markdown h5 .anchor::before,
 .markdown h6 .anchor::before {
     color: #2563EB;
-    padding-right: 0.75rem;
     font-weight: bold;
 }
 
