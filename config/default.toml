@@ -127,6 +127,8 @@ secret = "bc0805d578df487e869792ccb878f3da"
 [theme]
 # 主题文件存储的目录路径
 dir = "themes"
+# 自定义模板目录
+custom_template_dir = "data/templates"
 # 是否启用内置的代码语法
 enable_default_code_syntax = true
 # 是否启用内置的代码主题

@@ -208,6 +208,8 @@ pub struct JwtConfig {
 pub struct ThemeConfig {
     /// 主题文件存储的目录路径
     pub dir: String,
+    /// 自定义模板目录
+    pub custom_template_dir: String,
     /// 是否启用内置的代码语法
     pub enable_default_code_syntax: bool,
     /// 是否启用内置的代码主题
@@ -238,6 +240,7 @@ impl<'de> Deserialize<'de> for ThemeConfig {
         #[derive(Deserialize)]
         struct TempThemeConfig {
             dir: String,
+            custom_template_dir: String,
             enable_default_code_syntax: bool,
             enable_default_code_themes: bool,
             current_page_theme: String,
@@ -249,6 +252,7 @@ impl<'de> Deserialize<'de> for ThemeConfig {
         let current_theme = CurrentThemeConfig::from_theme(&temp.dir, &temp.current_page_theme);
         Ok(ThemeConfig {
             dir: temp.dir,
+            custom_template_dir: temp.custom_template_dir,
             enable_default_code_syntax: temp.enable_default_code_syntax,
             enable_default_code_themes: temp.enable_default_code_themes,
             current_page_theme: temp.current_page_theme,

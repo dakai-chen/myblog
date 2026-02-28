@@ -8,15 +8,24 @@ use crate::config::ThemeConfig;
 use crate::template::render::{PageContext, TemplateRenderData};
 
 pub fn build_template(config: &ThemeConfig) -> anyhow::Result<TemplateEngine> {
-    let mut tera = Tera::new(
+    let default = Tera::parse(
         &crate::util::path::root(&config.current().templates_dir)
             .join("**/*")
             .into_string(),
     )?;
 
-    helper::register_helper(&mut tera, config)?;
+    let mut custom = Tera::parse(
+        &crate::util::path::root(&config.custom_template_dir)
+            .join("**/*")
+            .into_string(),
+    )?;
 
-    Ok(TemplateEngine { tera })
+    custom.extend(&default)?;
+    custom.build_inheritance_chains()?;
+
+    helper::register_helper(&mut custom, config)?;
+
+    Ok(TemplateEngine { tera: custom })
 }
 
 pub struct TemplateEngine {
