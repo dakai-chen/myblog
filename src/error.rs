@@ -117,7 +117,7 @@ pub enum AppErrorMeta {
     /// 数据大小超出限制
     DataTooLarge { limit: u64 },
     /// 文章已锁定
-    ArticleLocked { article_id: String },
+    ArticleLocked { article_id: String, title: String },
 }
 
 impl AppErrorMeta {
@@ -172,7 +172,7 @@ impl AppErrorMeta {
             AppErrorMeta::AdminAccessTokenInvalid => StatusCode::UNAUTHORIZED,
             AppErrorMeta::PermissionDenied => StatusCode::FORBIDDEN,
             AppErrorMeta::DataTooLarge { .. } => StatusCode::PAYLOAD_TOO_LARGE,
-            AppErrorMeta::ArticleLocked { .. } => StatusCode::UNAUTHORIZED,
+            AppErrorMeta::ArticleLocked { .. } => StatusCode::FORBIDDEN,
         }
     }
 

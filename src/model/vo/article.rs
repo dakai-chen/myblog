@@ -223,14 +223,14 @@ impl TemplateRenderData for ArticleDetailsVo {
 
 /// 解锁文章页面
 #[derive(Debug, Clone, Serialize)]
-pub struct UnlockArticleVo {
+pub struct UnlockArticleVo<'a> {
     /// 文章ID
-    pub article_id: String,
+    pub article_id: &'a str,
     /// 标题
-    pub title: String,
+    pub title: &'a str,
 }
 
-impl TemplateRenderData for UnlockArticleVo {
+impl TemplateRenderData for UnlockArticleVo<'_> {
     fn template_name() -> &'static str {
         "article/unlock.html"
     }

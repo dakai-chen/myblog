@@ -254,7 +254,8 @@ pub async fn get_article(
     };
     if admin.is_none() && article.password.is_some() && !visitor.has_article(&article.id).await? {
         return Err(AppErrorMeta::ArticleLocked {
-            article_id: article.id.clone(),
+            article_id: article.id,
+            title: article.title,
         }
         .into_error());
     }
@@ -364,7 +365,8 @@ pub async fn download_attachment(
     };
     if admin.is_none() && article.password.is_some() && !visitor.has_article(&article.id).await? {
         return Err(AppErrorMeta::ArticleLocked {
-            article_id: article.id.clone(),
+            article_id: article.id,
+            title: article.title,
         }
         .into_error());
     }

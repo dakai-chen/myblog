@@ -111,21 +111,11 @@ async fn error_to_status_code(
     let app_error = crate::error::into_app_error(error);
     tracing::error!("{app_error}");
 
-    if let AppErrorMeta::ArticleLocked { article_id } = app_error.meta() {
-        let mut db = state.db.acquire().await?;
-        let Some(article) = crate::storage::db::article::find(article_id, &mut db).await? else {
-            return Err(AppErrorMeta::Internal
-                .with_context(format!(
-                    "渲染文章解锁页面时，找不到文章（文章ID：{article_id}）"
-                ))
-                .into());
-        };
-        let vo = UnlockArticleVo {
-            article_id: article.id,
-            title: article.title,
-        };
+    if let AppErrorMeta::ArticleLocked { article_id, title } = app_error.meta() {
+        let vo = UnlockArticleVo { article_id, title };
         let context = PageContext::new(vo);
-        return Html(state.template.typed_render(&context)).into_response();
+        let html = state.template.typed_render(&context);
+        return (app_error.meta().status_code(), Html(html)).into_response();
     }
 
     if let AppErrorMeta::AdminAccessTokenExpired
