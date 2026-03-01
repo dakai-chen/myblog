@@ -26,10 +26,11 @@
     <div class="form-input-group">
         <label>密码</label>
         {% if context.password %}
-        <input type="text" name="password" autocomplete="off" value="{{ context.password }}">
+        <input type="text" id="password_input" name="password" autocomplete="off" value="{{ context.password }}">
         {% else %}
-        <input type="text" name="password" autocomplete="off">
+        <input type="text" id="password_input" name="password" autocomplete="off">
         {% endif %}
+        <button type="button" onclick="generate_random_pwd('password_input')">随机</button>
     </div>
     <div class="form-input-group">
         <label>状态</label>
