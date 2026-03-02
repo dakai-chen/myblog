@@ -5,6 +5,7 @@ use boluo::BoxError;
 use boluo::body::Bytes;
 use futures_util::Stream;
 
+use crate::model::common::resource::ResourcePath;
 use crate::model::po::resource::ResourcePo;
 
 /// 上传资源文件自定义选项
@@ -47,7 +48,7 @@ pub struct ResourceBo {
     /// 文件扩展名
     pub extension: String,
     /// 文件存储路径
-    pub path: String,
+    pub path: ResourcePath,
     /// 文件大小
     pub size: u64,
     /// 文件类型

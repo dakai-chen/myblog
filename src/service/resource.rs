@@ -13,6 +13,7 @@ use crate::model::bo::resource::{
     FindResourceBo, RemoveResourceBo, ResourceBo, UploadResourceBo, UploadResourceMetaBo,
     UploadResourceOptionsBo,
 };
+use crate::model::common::resource::ResourcePath;
 use crate::model::po::resource::ResourcePo;
 use crate::storage::db::DbConn;
 use crate::util::time::UnixTimestampSecs;
@@ -44,11 +45,11 @@ pub async fn find_resource(
     let Some(resource) = crate::storage::db::resource::find(&bo.resource_id, db).await? else {
         return Ok(None);
     };
-    if !Path::new(&resource.path).is_file() {
+    if !Path::new(&resource.path.absolute()).is_file() {
         tracing::warn!(
             "资源文件不存在 (id: {}, path: {})",
             resource.id,
-            resource.path
+            resource.path.absolute()
         );
         return Ok(None);
     }
@@ -73,7 +74,7 @@ pub async fn upload_resource_with_options(
     let duplicate_path = if let Some(duplicate) =
         crate::storage::db::resource::find_duplicate(&upload.meta.sha256, upload.meta.size, db)
             .await?
-        && Path::new(&duplicate.path).is_file()
+        && Path::new(&duplicate.path.absolute()).is_file()
     {
         Some(duplicate.path)
     } else {
@@ -85,7 +86,7 @@ pub async fn upload_resource_with_options(
         None => {
             let path = generate_storage_path();
             let file = temp_file.move_to(&path).await?;
-            (Some(file), path)
+            (Some(file), ResourcePath::from_absolute(path)?)
         }
     };
 

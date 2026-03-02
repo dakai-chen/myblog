@@ -38,7 +38,9 @@ pub async fn download_resource(
     if !resource.is_public {
         return Err(AppErrorMeta::NotFound.into_error().into());
     }
-    let response = ServeFile::new(resource.path).call(request).await?;
+    let response = ServeFile::new(resource.path.absolute())
+        .call(request)
+        .await?;
     let encoded_filename = urlencoding::encode(&resource.name);
     let response_headers = [
         ("Content-Type", resource.mime_type),

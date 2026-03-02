@@ -1,3 +1,5 @@
+use crate::model::common::resource::ResourcePath;
+
 /// 资源文件
 #[derive(Debug, Clone, sqlx::FromRow)]
 pub struct ResourcePo {
@@ -8,7 +10,7 @@ pub struct ResourcePo {
     /// 文件扩展名
     pub extension: String,
     /// 文件存储路径
-    pub path: String,
+    pub path: ResourcePath,
     /// 文件大小
     pub size: u64,
     /// 文件类型
