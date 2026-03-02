@@ -24,12 +24,14 @@ pub async fn remove_resource(bo: &RemoveResourceBo<'_>, db: &mut DbConn) -> Resu
     };
     crate::storage::db::resource::remove(&resource.id, db).await?;
 
-    let ref_count = crate::storage::db::resource::count_by_path(&resource.path, db).await?;
-    if ref_count == 0
-        && let Err(e) = std::fs::remove_file(&resource.path)
-    {
-        tracing::warn!("文件删除失败，路径：{}，错误：{e}", resource.path);
-    }
+    // 不再即时删除物理文件，改为定期统一清理
+    //
+    // let ref_count = crate::storage::db::resource::count_by_path(&resource.path, db).await?;
+    // if ref_count == 0
+    //     && let Err(e) = std::fs::remove_file(&resource.path)
+    // {
+    //     tracing::warn!("文件删除失败，路径：{}，错误：{e}", resource.path);
+    // }
 
     Ok(())
 }
