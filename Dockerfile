@@ -27,8 +27,8 @@ COPY --from=builder /app/.env.example ./.env
 COPY --from=builder /app/config ./config
 COPY --from=builder /app/sqlite ./sqlite
 COPY --from=builder /app/themes ./themes
-COPY --from=builder /app/install/bin/mysite /usr/local/bin/mysite
+COPY --from=builder /app/install/bin/myblog /usr/local/bin/myblog
 
-RUN chmod +x /usr/local/bin/mysite
+RUN chmod +x /usr/local/bin/myblog
 
-CMD ["mysite"]
+CMD ["myblog"]

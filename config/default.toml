@@ -27,7 +27,7 @@ enable_file_output = false
 # 日志文件存储目录
 file_dir = "log"
 # 日志文件名前缀
-file_prefix = "mysite.log"
+file_prefix = "myblog.log"
 # 日志文件最大保留数量
 max_keep_files = 7
 

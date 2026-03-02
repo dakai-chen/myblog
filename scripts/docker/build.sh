@@ -11,4 +11,4 @@ while getopts "t:f:" opt; do
     esac
 done
 
-docker build --cpu-period=100000 --cpu-quota=50000 -t mysite:$TAG --build-arg FEATURES="$FEATURES" .
+docker build --cpu-period=100000 --cpu-quota=50000 -t myblog:$TAG --build-arg FEATURES="$FEATURES" .

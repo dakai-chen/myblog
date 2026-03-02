@@ -1978,7 +1978,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mysite"
+name = "myblog"
 version = "0.1.0"
 dependencies = [
  "anyhow",
