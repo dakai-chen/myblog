@@ -154,6 +154,14 @@
     display: inline;
 }
 
+.markdown li p:first-of-type+* {
+    margin-top: 1rem !important;
+}
+
+.markdown li>*:last-child {
+    margin-bottom: 1rem !important;
+}
+
 .markdown blockquote {
     border-left: 0.25rem solid #ddd;
     padding: 0 1rem;
