@@ -102,6 +102,8 @@ upload_dir = "data/upload"
 upload_file_max_size = "2GiB"
 # 回收站目录
 trash_dir = "data/trash"
+# 孤立文件移入回收站的时间阈值
+trash_threshold = "8h"
 # 公开文件的存储目录
 public_dir = "data/public"
 

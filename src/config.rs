@@ -184,6 +184,9 @@ pub struct ResourceConfig {
     pub upload_file_max_size: u64,
     /// 回收站目录
     pub trash_dir: String,
+    /// 孤立文件移入回收站的时间阈值
+    #[serde(with = "humantime_serde")]
+    pub trash_threshold: Duration,
     /// 公开文件的存储目录
     pub public_dir: String,
 }

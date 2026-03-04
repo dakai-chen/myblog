@@ -17,8 +17,8 @@ const DB_BATCH_SIZE: usize = 200;
 pub async fn purge_orphaned_resources(state: Arc<AppState>) -> anyhow::Result<()> {
     let mut scanner = {
         let dir = &crate::config::get().resource.upload_dir;
-        let time_threshold = UnixTimestampSecs::now().sub(Duration::from_secs(3600 * 24));
-        FileScanner::new(dir, time_threshold.as_i64())
+        let threshold = crate::config::get().resource.trash_threshold;
+        FileScanner::new(dir, threshold)
     };
 
     let mut count: u64 = 0;
@@ -26,7 +26,7 @@ pub async fn purge_orphaned_resources(state: Arc<AppState>) -> anyhow::Result<()
     loop {
         let scanned_files = {
             let f = move || {
-                let scanned_files = scanner.scan(FS_BATCH_SIZE);
+                let scanned_files = scanner.next_batch(FS_BATCH_SIZE);
                 (scanner, scanned_files)
             };
             let span = Span::current();
@@ -89,13 +89,13 @@ fn move_to_trash(path: &ResourcePath) -> Result<(), std::io::Error> {
     std::fs::rename(path.absolute(), &to)
 }
 
-pub struct FileScanner {
+struct FileScanner {
     iter: Box<dyn Iterator<Item = DirEntry> + Send + 'static>,
-    time_threshold: i64,
+    time_threshold: UnixTimestampSecs,
 }
 
 impl FileScanner {
-    pub fn new(dir: &str, time_threshold: i64) -> Self {
+    pub fn new(dir: &str, threshold: Duration) -> Self {
         Self {
             iter: Box::new(
                 WalkDir::new(dir)
@@ -103,11 +103,11 @@ impl FileScanner {
                     .filter_map(|e| e.ok())
                     .filter(|e| e.path().is_file()),
             ),
-            time_threshold,
+            time_threshold: UnixTimestampSecs::now().sub(threshold),
         }
     }
 
-    pub fn scan_in(&mut self, n: usize, buf: &mut Vec<ResourcePath>) -> usize {
+    pub fn next_batch_into(&mut self, n: usize, buf: &mut Vec<ResourcePath>) -> usize {
         let buf_init_len = buf.len();
         for entry in self.iter.as_mut().take(n) {
             let Some(created) = entry
@@ -118,7 +118,7 @@ impl FileScanner {
             else {
                 continue;
             };
-            if created.as_i64() >= self.time_threshold {
+            if created.as_i64() > self.time_threshold.as_i64() {
                 continue;
             }
             let Some(path) = entry.path().to_str() else {
@@ -136,9 +136,9 @@ impl FileScanner {
         buf.len() - buf_init_len
     }
 
-    pub fn scan(&mut self, n: usize) -> Vec<ResourcePath> {
-        let mut buf = Vec::new();
-        self.scan_in(n, &mut buf);
+    pub fn next_batch(&mut self, n: usize) -> Vec<ResourcePath> {
+        let mut buf = Vec::with_capacity(n);
+        self.next_batch_into(n, &mut buf);
         buf
     }
 }
