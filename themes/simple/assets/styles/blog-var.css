@@ -1,109 +1,148 @@
 :root {
     /***************************************************************************
-     * 颜色
+     * 核心颜色体系
      **************************************************************************/
-    --blog-color-text: #212529;
-    --blog-color-text-disabled: #495057;
-    --blog-color-text-bg: #f8f9fa;
+    /* 主色 */
+    --color-primary: #0d6efd;
+    --color-primary-dark: #013889;
+    --color-danger: #dc3545;
+    --color-danger-dark: #bb2d3b;
+    --color-secondary: #4096ff;
+
+    /* 文本色 */
+    --color-text: #212529;
+    --color-text-secondary: #495057;
+    --color-text-disabled: #888888;
+
+    /* 背景色 */
+    --color-bg-white: #ffffff;
+    --color-bg-light: #f8f8f8;
+    --color-bg-hover: #e9ecef;
+
+    /* 边框色 */
+    --color-border: #000000;
+    --color-border-light: #dfe2e5;
+    --color-border-ultralight: #eeeeee;
+
+    /* 高亮/辅助色 */
+    --color-highlight: #dcdcdc;
+    --color-link-visited: #7c1cc4;
+    --color-link-visited-h: #4a0a75;
+
+    /* 提示框色系 */
+    --color-success: #3c763d;
+    --color-success-bg: #dff0d8;
+    --color-success-border: #d6e9c6;
+
+    --color-warning: #8a6d3b;
+    --color-warning-bg: #fff3cd;
+    --color-warning-border: #ffe69c;
+
+    --color-error: #a94442;
+    --color-error-bg: #f2dede;
+    --color-error-border: #ebccd1;
+
+    --color-info: #31708f;
+    --color-info-bg: #d9edf7;
+    --color-info-border: #bce8f1;
+
+    /* 中性灰阶 */
+    --color-gray-100: #f9fafb;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #9ca3af;
+    --color-gray-400: #858585;
+    --color-gray-500: #6d6d6d;
+    --color-gray-600: #374151;
 
     /***************************************************************************
-     * 按钮
+     * 组件变量（复用核心色）
      **************************************************************************/
-    --blog-btn-color: var(--blog-color-text);
-    --blog-btn-color-bg: var(--blog-color-text-bg);
-    --blog-btn-color-hover: var(--blog-color-text);
-    --blog-btn-color-hover-bg: #d3d4d5;
+    /* 按钮 */
+    --blog-btn-color: var(--color-text);
+    --blog-btn-color-bg: var(--color-bg-light);
+    --blog-btn-color-hover: var(--color-text);
+    --blog-btn-color-hover-bg: var(--color-bg-hover);
     --blog-btn-padding: 0.375rem 0.75rem;
 
-    /***************************************************************************
-     * 超链接
-     **************************************************************************/
-    --blog-a-normal-color: #0d6efd;
-    --blog-a-normal-hover: #013889;
-    --blog-a-normal-active: #0d6efd;
+    /* 超链接 */
+    --blog-a-normal-color: var(--color-primary);
+    --blog-a-normal-hover: var(--color-primary-dark);
+    --blog-a-normal-active: var(--color-primary);
 
-    --blog-a-visited-color: #7c1cc4;
-    --blog-a-visited-hover: #4a0a75;
-    --blog-a-visited-active: #7c1cc4;
+    --blog-a-visited-color: var(--color-link-visited);
+    --blog-a-visited-hover: var(--color-link-visited-h);
+    --blog-a-visited-active: var(--color-link-visited);
 
-    --blog-a-disabled-color: #4b5563;
-    --blog-a-disabled-hover: #2d3748;
-    --blog-a-disabled-active: #4b5563;
+    --blog-a-disabled-color: var(--color-text-secondary);
+    --blog-a-disabled-hover: var(--color-text-disabled);
+    --blog-a-disabled-active: var(--color-text-secondary);
 
-    /***************************************************************************
-     * 错误提示框
-     **************************************************************************/
-    --blog-alert-color-bg: #fff3cd;
-    --blog-alert-color-border: #ffe69c;
+    /* 错误提示框 */
+    --blog-alert-color-bg: var(--color-warning-bg);
+    --blog-alert-color-border: var(--color-warning-border);
 
-    /***************************************************************************
-     * 消息提示框
-     **************************************************************************/
-    --blog-tips-item-color: #333333;
-    --blog-tips-item-color-bg: #f0f0f0;
-    --blog-tips-item-color-border: #cccccc;
+    /* 消息提示框 */
+    --blog-tips-item-color: var(--color-text);
+    --blog-tips-item-color-bg: var(--color-bg-light);
+    --blog-tips-item-color-border: var(--color-border-light);
     --blog-tips-item-width: 90%;
     --blog-tips-item-max-width: calc(var(--blog-container-max-width) * 0.6);
 
-    /***************************************************************************
-     * 模态框
-     **************************************************************************/
-    --blog-modal-color-border: #dee2e6;
+    /* 模态框 */
+    --blog-modal-color-border: var(--color-border-light);
     --blog-modal-width: 90%;
     --blog-modal-max-width: calc(var(--blog-container-max-width) * 0.6);
 
-    /***************************************************************************
-     * 边框
-     **************************************************************************/
+    /* 边框 */
     --blog-border-size: 1px;
 
-    /***************************************************************************
-     * 容器
-     **************************************************************************/
+    /* 容器 */
     --blog-container-max-width: 880px;
 }
 
+/* 按钮变体 */
 .btn-danger {
-    --blog-btn-color: #fff;
-    --blog-btn-color-bg: #dc3545;
-    --blog-btn-color-hover: #fff;
-    --blog-btn-color-hover-bg: #bb2d3b;
+    --blog-btn-color: var(--color-bg-white);
+    --blog-btn-color-bg: var(--color-danger);
+    --blog-btn-color-hover: var(--color-bg-white);
+    --blog-btn-color-hover-bg: var(--color-danger-dark);
 }
 
 .btn-light {
-    --blog-btn-color: var(--blog-color-text);
+    --blog-btn-color: var(--color-text);
     --blog-btn-color-bg: transparent;
-    --blog-btn-color-hover: var(--blog-color-text);
-    --blog-btn-color-hover-bg: #e9ecef;
-    --blog-btn-padding: 0.5rem 0;
+    --blog-btn-color-hover: var(--color-text);
+    --blog-btn-color-hover-bg: var(--color-bg-hover);
 }
 
+/* 链接禁用变体 */
 .a-article-hide {
     --blog-a-normal-color: var(--blog-a-disabled-color);
     --blog-a-normal-hover: var(--blog-a-disabled-hover);
     --blog-a-normal-active: var(--blog-a-disabled-active);
 }
 
+/* 提示框变体 */
 .tips-item-success {
-    --blog-tips-item-color: #3c763d;
-    --blog-tips-item-color-bg: #dff0d8;
-    --blog-tips-item-color-border: #d6e9c6;
+    --blog-tips-item-color: var(--color-success);
+    --blog-tips-item-color-bg: var(--color-success-bg);
+    --blog-tips-item-color-border: var(--color-success-border);
 }
 
 .tips-item-warn {
-    --blog-tips-item-color: #8a6d3b;
-    --blog-tips-item-color-bg: #fcf8e3;
-    --blog-tips-item-color-border: #faebcc;
+    --blog-tips-item-color: var(--color-warning);
+    --blog-tips-item-color-bg: var(--color-warning-bg);
+    --blog-tips-item-color-border: var(--color-warning-border);
 }
 
 .tips-item-error {
-    --blog-tips-item-color: #a94442;
-    --blog-tips-item-color-bg: #f2dede;
-    --blog-tips-item-color-border: #ebccd1;
+    --blog-tips-item-color: var(--color-error);
+    --blog-tips-item-color-bg: var(--color-error-bg);
+    --blog-tips-item-color-border: var(--color-error-border);
 }
 
 .tips-item-info {
-    --blog-tips-item-color: #31708f;
-    --blog-tips-item-color-bg: #d9edf7;
-    --blog-tips-item-color-border: #bce8f1;
+    --blog-tips-item-color: var(--color-info);
+    --blog-tips-item-color-bg: var(--color-info-bg);
+    --blog-tips-item-color-border: var(--color-info-border);
 }
