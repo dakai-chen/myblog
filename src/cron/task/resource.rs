@@ -103,7 +103,7 @@ impl FileScanner {
                     .filter_map(|e| e.ok())
                     .filter(|e| e.path().is_file()),
             ),
-            time_threshold: UnixTimestampSecs::now().sub(threshold),
+            time_threshold: UnixTimestampSecs::now().saturating_sub(threshold),
         }
     }
 

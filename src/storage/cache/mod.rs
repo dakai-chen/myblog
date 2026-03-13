@@ -179,7 +179,12 @@ impl<T: CacheData> Cache<T> {
     where
         S: CacheStorage,
     {
-        Self::set_expires_at_in(id, UnixTimestampSecs::now().add(ttl).as_i64(), storage).await
+        Self::set_expires_at_in(
+            id,
+            UnixTimestampSecs::now().saturating_add(ttl).as_i64(),
+            storage,
+        )
+        .await
     }
 
     pub async fn set_expires_at_in<S>(

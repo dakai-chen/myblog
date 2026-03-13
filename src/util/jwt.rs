@@ -68,7 +68,7 @@ where
 
     pub fn with_ttl(data: T, ttl: Duration) -> Self {
         let now = UnixTimestampSecs::now();
-        Self::new(data, now.as_i64(), now.add(ttl).as_i64())
+        Self::new(data, now.as_i64(), now.saturating_add(ttl).as_i64())
     }
 
     pub fn encode(&self, secret: &[u8]) -> anyhow::Result<String> {

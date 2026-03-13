@@ -74,7 +74,7 @@ pub async fn unlock_article(
             count: 1,
             created_at: now.as_i64(),
             expires_at: now
-                .add(crate::config::get().article.unlock_try_window)
+                .saturating_add(crate::config::get().article.unlock_try_window)
                 .as_i64(),
         };
         crate::storage::db::article_unlock_attempts::remove_single_expired(
