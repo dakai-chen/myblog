@@ -6,7 +6,7 @@
     <link href="{{ config.theme.extensions.base_url }}"/>
     <id>{{ config.theme.extensions.base_url }}/atom.xml</id>
     <updated>{{ context.updated_at | date(format="%Y-%m-%dT%H:%M:%SZ", timezone="UTC") }}</updated>
-    <subtitle>{{ config.theme.extensions.rss_description }}</subtitle>
+    <subtitle>{{ config.theme.extensions.description }}</subtitle>
 
     {% for article in context.items %}
     <entry>

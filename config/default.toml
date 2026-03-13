@@ -190,11 +190,11 @@ session_keep_threshold = "8h"
 [theme.extensions]
 ### 网站标题
 title = "个人博客"
+### 网站描述
+description = ""
 ### 网站的基础网址
 base_url = ""
-### 首页图片
-home_img = "/theme/assets/image/home.png"
 ### 网站图标
 favicon_ico = "/theme/assets/image/favicon.ico"
-### RSS 源的描述
-rss_description = ""
+### 首页图片
+home_img = "/theme/assets/image/home.png"

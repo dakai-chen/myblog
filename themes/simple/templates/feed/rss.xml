@@ -3,7 +3,7 @@
 <channel>
     <title>{{ config.theme.extensions.title }}</title>
     <link>{{ config.theme.extensions.base_url }}</link>
-    <description>{{ config.theme.extensions.rss_description }}</description>
+    <description>{{ config.theme.extensions.description }}</description>
     {% for article in context.items %}
     <item>
         <title>{{ article.title }}</title>
