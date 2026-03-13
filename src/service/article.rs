@@ -1,7 +1,6 @@
 use std::borrow::Cow;
 use std::net::IpAddr;
 use std::sync::LazyLock;
-use std::time::Duration;
 
 use regex::Regex;
 
@@ -443,7 +442,7 @@ async fn update_article_visit_stats(
     };
     let cache = Cache::builder(VisitorArticleAccessRecordCo)
         .id(&cache_id)
-        .ttl(Duration::from_secs(3600 * 24))
+        .expires_at(UnixTimestampSecs::now().tomorrow_start_local()?.as_i64())
         .build()?;
     let uv_add = match cache.set(CacheSetMode::OnlyIfNotExists).await? {
         true => 1,
