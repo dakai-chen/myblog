@@ -72,8 +72,8 @@ function modal_upload_attachment_register(target, callback) {
     });
 }
 
-async function upload_modal_on_copy(modal_id) {
-    let input = document.querySelector(`#${modal_id} input[name=path]`);
+async function modal_upload_file_copy_path(modal_class_id) {
+    let input = document.querySelector(`.${modal_class_id} input[name=path]`);
     try {
         await navigator.clipboard.writeText(input.value);
         tips_show("tips-item-success", "内容已复制到剪贴板");

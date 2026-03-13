@@ -1,4 +1,4 @@
-{% import "base/macros.html" as macros %}
+{% import "base/modal.html" as modal %}
 {% extends "base/base.html" %}
 
 {% block breadcrumb %}
@@ -9,7 +9,7 @@
 {% endblock breadcrumb %}
 
 {% block admin_menu %}
-<li><a class="modal-open" href="javascript:void(0)" data-modal-target="#modal_upload_file">上传</a></li>
+<li><a class="modal-open" href="javascript:void(0)" data-modal-target=".cid-modal-upload-file">上传</a></li>
 {% endblock admin_menu %}
 
 {% block main %}
@@ -80,13 +80,13 @@
     <button type="submit">保存</button>
 </form>
 <!-- 模态框 - 文件上传 -->
-{{ macros::modal_upload_file(id="modal_upload_file") }}
+{{ modal::upload_file(class="cid-modal-upload-file") }}
 {% endblock main %}
 
 {% block scripts %}
 {{ super() }}
 <script>
-    modal_upload_file_register("#modal_upload_file", {
+    modal_upload_file_register(".cid-modal-upload-file", {
         open: (modal) => {
             let upload_btn = modal.querySelector(".modal-footer .confirm");
             upload_btn.disabled = false;

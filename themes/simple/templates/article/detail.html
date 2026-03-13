@@ -1,4 +1,4 @@
-{% import "base/macros.html" as macros %}
+{% import "base/modal.html" as modal %}
 {% extends "base/base.html" %}
 
 {% block meta %}
@@ -17,10 +17,10 @@
 {% endblock breadcrumb %}
 
 {% block admin_menu %}
-<li><a href="javascript:void(0)" id="copy-share-link">分享</a></li>
-<li><a class="modal-open" href="javascript:void(0)" data-modal-target="#modal_upload_attachment">附件</a></li>
+<li><a href="javascript:void(0)" class="cid-copy-share-link">分享</a></li>
+<li><a class="modal-open" href="javascript:void(0)" data-modal-target=".cid-modal-upload-attachment">附件</a></li>
 <li><a href="/articles/{{ context.article_id }}/_update">编辑</a></li>
-<li><a class="modal-open" href="javascript:void(0)" data-modal-target="#modal_delete_article"
+<li><a class="modal-open" href="javascript:void(0)" data-modal-target=".cid-modal-delete-article"
         data-modal-value="{{ context.article_id }}">删除</a></li>
 {% endblock admin_menu %}
 
@@ -69,7 +69,7 @@
                     href="/articles/{{ attachment.article_id }}/attachments/{{ attachment.attachment_id }}">下载</a>
                 {% if admin %}
                 <a class="article-attachment-download-btn modal-open" href="javascript:void(0)"
-                    data-modal-target="#modal_delete_attachment"
+                    data-modal-target=".cid-modal-delete-attachment"
                     data-modal-value='{"article_id": "{{ attachment.article_id }}","attachment_id": "{{ attachment.attachment_id }}"}'>删除</a>
                 {% endif %}
             </div>
@@ -80,30 +80,30 @@
 </article>
 {% if admin %}
 <!-- 模态框 - 删除文章 -->
-{{ macros::modal_delete_article(id="modal_delete_article") }}
+{{ modal::delete_article(class="cid-modal-delete-article") }}
 <!-- 模态框 - 删除附件 -->
-{{ macros::modal_delete_attachment(id="modal_delete_attachment") }}
+{{ modal::delete_attachment(class="cid-modal-delete-attachment") }}
 <!-- 模态框 - 附件上传 -->
-{{ macros::modal_upload_attachment(id="modal_upload_attachment") }}
+{{ modal::upload_attachment(class="cid-modal-upload-attachment") }}
 {% endif %}
 {% endblock main %}
 
 {% block scripts %}
 {{ super() }}
 <script>
-    modal_register("#modal_delete_article", {
+    modal_register(".cid-modal-delete-article", {
         on_confirm: (_, id) => {
             api_delete_article(`${id}`, () => { window.location.href = "/articles" });
         }
     });
 
-    modal_register("#modal_delete_attachment", {
+    modal_register(".cid-modal-delete-attachment", {
         on_confirm: (_, data) => {
             api_delete_attachment(data, () => { window.location.reload() });
         }
     });
 
-    modal_upload_attachment_register("#modal_upload_attachment", {
+    modal_upload_attachment_register(".cid-modal-upload-attachment", {
         open: (modal) => {
             let upload_btn = modal.querySelector(".modal-footer .confirm");
             upload_btn.disabled = false;
@@ -135,14 +135,14 @@
     }
 
     function copy_share_link() {
-        const copy_share_link_btn = document.getElementById('copy-share-link');
+        const share_btn = document.querySelector('.cid-copy-share-link');
 
-        if (copy_share_link_btn === null) {
+        if (share_btn === null) {
             return;
         }
 
         // 绑定点击事件
-        copy_share_link_btn.addEventListener('click', function () {
+        share_btn.addEventListener('click', function () {
             const article_id = "{{ context.article_id }}";
             const base_url = window.location.origin;
 

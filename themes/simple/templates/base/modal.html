@@ -1,6 +1,6 @@
 <!-- 模态框 - 删除文章 -->
-{% macro modal_delete_article(id) %}
-<div class="modal" id="{{ id }}">
+{% macro delete_article(class) %}
+<div class="modal {{ class }}">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>删除文章</span>
@@ -14,11 +14,11 @@
         </div>
     </div>
 </div>
-{% endmacro modal_delete_article %}
+{% endmacro delete_article %}
 
 <!-- 模态框 - 删除附件 -->
-{% macro modal_delete_attachment(id) %}
-<div class="modal" id="{{ id }}">
+{% macro delete_attachment(class) %}
+<div class="modal {{ class }}">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>删除附件</span>
@@ -32,11 +32,11 @@
         </div>
     </div>
 </div>
-{% endmacro modal_delete_attachment %}
+{% endmacro delete_attachment %}
 
 <!-- 模态框 - 文件上传 -->
-{% macro modal_upload_file(id) %}
-<div class="modal" id="{{ id }}">
+{% macro upload_file(class) %}
+<div class="modal {{ class }}">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>文件上传</span>
@@ -51,7 +51,7 @@
                 <div class="form-input-group">
                     <label>路径</label>
                     <input type="text" name="path">
-                    {% set copy_fn = "upload_modal_on_copy('" ~ id ~ "')" %}
+                    {% set copy_fn = "modal_upload_file_copy_path('" ~ class ~ "')" %}
                     <button onclick="{{ copy_fn }}">复制</button>
                 </div>
             </div>
@@ -62,11 +62,11 @@
         </div>
     </div>
 </div>
-{% endmacro modal_upload_file %}
+{% endmacro upload_file %}
 
 <!-- 模态框 - 附件上传 -->
-{% macro modal_upload_attachment(id) %}
-<div class="modal" id="{{ id }}">
+{% macro upload_attachment(class) %}
+<div class="modal {{ class }}">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>附件上传</span>
@@ -86,4 +86,4 @@
         </div>
     </div>
 </div>
-{% endmacro modal_upload_attachment %}
+{% endmacro upload_attachment %}
