@@ -33,6 +33,8 @@ pub struct AppConfig {
     pub cron: CronConfig,
     /// 文章配置
     pub article: ArticleConfig,
+    /// 游客配置
+    pub visitor: VisitorConfig,
 }
 
 impl AppConfig {
@@ -358,4 +360,15 @@ pub struct ArticleConfig {
     /// 作为 About 页面的文章
     #[serde(default)]
     pub about_article_id: Option<String>,
+}
+
+/// 游客配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct VisitorConfig {
+    /// 游客会话的有效期
+    #[serde(with = "humantime_serde")]
+    pub session_ttl: Duration,
+    /// 游客会话自动续期的触发阈值
+    #[serde(with = "humantime_serde")]
+    pub session_keep_threshold: Duration,
 }

@@ -1,19 +1,17 @@
-use std::time::Duration;
-
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::bo::visitor::VisitorArticleAccessPermitBo;
 use crate::model::co::visitor::VisitorCo;
 use crate::storage::cache::Cache;
 use crate::storage::cache::storage::CacheSetMode;
 
-pub const VISITOR_TTL: Duration = Duration::from_secs(3600 * 24 * 7);
-pub const VISITOR_KEEP_THRESHOLD: Duration = Duration::from_secs(3600 * 24);
-
 pub async fn create() -> Result<String, AppError> {
     let data = VisitorCo {
         visitor_id: crate::util::uuid::v4(),
     };
-    let visitor = Cache::builder(data).self_id().ttl(VISITOR_TTL).build()?;
+    let visitor = Cache::builder(data)
+        .self_id()
+        .ttl(crate::config::get().visitor.session_ttl)
+        .build()?;
     if !visitor.set(CacheSetMode::OnlyIfNotExists).await? {
         return Err(AppErrorMeta::Internal.with_context(format!(
             "创建访客失败，访客ID已存在。访客ID: {}",
@@ -39,8 +37,8 @@ pub async fn keep(visitor_id: &str) -> anyhow::Result<bool> {
     let Some(ttl) = Cache::<VisitorCo>::get_ttl(visitor_id).await? else {
         return Ok(false);
     };
-    if ttl <= VISITOR_KEEP_THRESHOLD {
-        Cache::<VisitorCo>::set_ttl(visitor_id, VISITOR_TTL).await
+    if ttl <= crate::config::get().visitor.session_keep_threshold {
+        Cache::<VisitorCo>::set_ttl(visitor_id, crate::config::get().visitor.session_ttl).await
     } else {
         Ok(true)
     }

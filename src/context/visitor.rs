@@ -48,7 +48,7 @@ impl VisitorId {
     fn cookie_expires_at() -> anyhow::Result<OffsetDateTime> {
         Ok(OffsetDateTime::from_unix_timestamp(
             UnixTimestampSecs::now()
-                .saturating_add(crate::service::visitor::VISITOR_TTL)
+                .saturating_add(crate::config::get().visitor.session_ttl)
                 .as_i64(),
         )?)
     }
