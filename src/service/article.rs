@@ -1,5 +1,4 @@
 use std::borrow::Cow;
-use std::net::IpAddr;
 use std::sync::LazyLock;
 
 use regex::Regex;
@@ -7,46 +6,25 @@ use regex::Regex;
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::bo::article::{
     AdminArticleDetailsBo, ArticleAttachmentBo, ArticleBo, ArticleDetailsBo, ArticleListBo,
-    ArticleListItemBo, CreateArticleBo, DownloadArticleAttachmentBo, GetArticleBo,
-    RemoveArticleAttachmentBo, RemoveArticleBo, SearchArticleBo, UnlockArticleBo, UpdateArticleBo,
-    UploadArticleAttachmentBo, VisitorArticleDetailsBo,
+    ArticleListItemBo, ArticleUnlockBanBo, CreateArticleBo, DownloadArticleAttachmentBo,
+    GetArticleBo, RemoveArticleAttachmentBo, RemoveArticleBo, SearchArticleBo, UnlockArticleBo,
+    UpdateArticleBo, UploadArticleAttachmentBo, VisitorArticleDetailsBo,
 };
 use crate::model::bo::auth::AdminBo;
 use crate::model::bo::resource::{RemoveResourceBo, UploadResourceOptionsBo};
 use crate::model::bo::visitor::VisitorBo;
-use crate::model::co::article::{
-    ArticleUnlockBanCo, ArticleUnlockBanCoIdGen, VisitorArticleAccessRecordCo,
-    VisitorArticleAccessRecordCoIdGen,
-};
+use crate::model::co::article::{VisitorArticleAccessRecordCo, VisitorArticleAccessRecordCoIdGen};
 use crate::model::common::article::{ArticleStatus, SearchArticleSort};
 use crate::model::po::article::{ArticlePo, SearchArticle};
 use crate::model::po::article_attachment::ArticleAttachmentPo;
 use crate::model::po::article_stats::ArticleStatsPo;
-use crate::model::po::article_unlock_attempts::ArticleUnlockAttemptsPo;
 use crate::model::po::resource::ResourcePo;
+use crate::storage::cache::Cache;
 use crate::storage::cache::storage::CacheSetMode;
-use crate::storage::cache::{Cache, CacheIdGenerator};
 use crate::storage::db::DbConn;
 use crate::util::join::HashJoin;
 use crate::util::pagination::PageData;
 use crate::util::time::UnixTimestampSecs;
-
-async fn unlock_ban(ip: IpAddr, article_id: &str) -> Result<(), AppError> {
-    let id = ArticleUnlockBanCoIdGen { ip, article_id };
-    let co = Cache::builder(ArticleUnlockBanCo)
-        .id(&id)
-        .ttl(crate::config::get().article.unlock_ban_ttl)
-        .build()?;
-    co.set(CacheSetMode::Overwrite).await?;
-    Ok(())
-}
-
-async fn unlock_ban_exists(ip: IpAddr, article_id: &str) -> Result<bool, AppError> {
-    let id = ArticleUnlockBanCoIdGen { ip, article_id };
-    Cache::<ArticleUnlockBanCo>::exists(id.generate_id().as_ref())
-        .await
-        .map_err(From::from)
-}
 
 /// 解锁文章（获取访问令牌）
 pub async fn unlock_article(
@@ -61,37 +39,15 @@ pub async fn unlock_article(
         return Err(AppErrorMeta::BadRequest.with_message("该文章无需密码进行访问"));
     };
 
-    if unlock_ban_exists(visitor.ip(), &bo.article_id).await? {
+    if ArticleUnlockBanBo::is_banned(visitor.ip(), &bo.article_id).await? {
         return Err(AppErrorMeta::BadRequest.with_message("文章解锁尝试次数过多，请稍后再试"));
     }
 
     if bo.password != password {
-        let now = UnixTimestampSecs::now();
-        let po = ArticleUnlockAttemptsPo {
-            ip: visitor.ip().to_string(),
-            article_id: article.id,
-            count: 1,
-            created_at: now.as_i64(),
-            expires_at: now
-                .saturating_add(crate::config::get().article.unlock_try_window)
-                .as_i64(),
-        };
-        crate::storage::db::article_unlock_attempts::remove_single_expired(
-            &po.ip,
-            &po.article_id,
-            db,
-        )
-        .await?;
-        let count = crate::storage::db::article_unlock_attempts::incr_count(&po, db).await?;
+        let (remaining_times, is_banned) =
+            ArticleUnlockBanBo::record_failed_with_ban(visitor.ip(), article.id, db).await?;
 
-        // 计算剩余次数
-        let remaining_times = crate::config::get()
-            .article
-            .unlock_try_max_times
-            .saturating_sub(count);
-
-        if remaining_times == 0 {
-            unlock_ban(visitor.ip(), &bo.article_id).await?;
+        if is_banned {
             return Err(AppErrorMeta::BadRequest.with_message("文章解锁尝试次数过多，请稍后再试"));
         } else {
             return Err(AppErrorMeta::BadRequest.with_message(format!(
@@ -99,6 +55,7 @@ pub async fn unlock_article(
             )));
         }
     }
+
     visitor.add_article(&article.id).await?;
     Ok(())
 }

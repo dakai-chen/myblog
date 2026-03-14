@@ -1,12 +1,19 @@
 use std::borrow::Cow;
+use std::net::IpAddr;
 
 use crate::error::AppError;
 use crate::model::bo::resource::{ResourceBo, UploadResourceBo};
+use crate::model::co::article::{ArticleUnlockBanCo, ArticleUnlockBanCoIdGen};
 use crate::model::common::article::{ArticleStatus, SearchArticleSort};
 use crate::model::po::article::ArticlePo;
 use crate::model::po::article_attachment::ArticleAttachmentPo;
 use crate::model::po::article_stats::ArticleStatsPo;
+use crate::model::po::article_unlock_attempts::ArticleUnlockAttemptsPo;
+use crate::storage::cache::storage::CacheSetMode;
+use crate::storage::cache::{Cache, CacheIdGenerator};
+use crate::storage::db::DbConn;
 use crate::util::pagination::{OptionalPage, Page, PageData};
+use crate::util::time::UnixTimestampSecs;
 
 /// 解锁文章
 #[derive(Debug, Clone)]
@@ -369,6 +376,78 @@ impl From<ArticlePo> for ArticleBo {
             created_at: value.created_at,
             updated_at: value.updated_at,
             published_at: value.published_at,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct ArticleUnlockBanBo;
+
+impl ArticleUnlockBanBo {
+    pub async fn ban(ip: IpAddr, article_id: &str) -> Result<(), AppError> {
+        let id = ArticleUnlockBanCoIdGen { ip, article_id };
+        let co = Cache::builder(ArticleUnlockBanCo)
+            .id(&id)
+            .ttl(crate::config::get().article.unlock_ban_ttl)
+            .build()?;
+        co.set(CacheSetMode::Overwrite).await?;
+        Ok(())
+    }
+
+    pub async fn is_banned(ip: IpAddr, article_id: &str) -> Result<bool, AppError> {
+        let id = ArticleUnlockBanCoIdGen { ip, article_id };
+        Cache::<ArticleUnlockBanCo>::exists(id.generate_id().as_ref())
+            .await
+            .map_err(From::from)
+    }
+
+    pub async fn record_failed(
+        ip: IpAddr,
+        article_id: impl Into<String>,
+        db: &mut DbConn,
+    ) -> Result<u32, AppError> {
+        let now = UnixTimestampSecs::now();
+        let po = ArticleUnlockAttemptsPo {
+            ip: ip.to_string(),
+            article_id: article_id.into(),
+            count: 1,
+            created_at: now.as_i64(),
+            expires_at: now
+                .saturating_add(crate::config::get().article.unlock_try_window)
+                .as_i64(),
+        };
+
+        crate::storage::db::article_unlock_attempts::remove_single_expired(
+            &po.ip,
+            &po.article_id,
+            db,
+        )
+        .await?;
+
+        crate::storage::db::article_unlock_attempts::incr_count(&po, db)
+            .await
+            .map_err(From::from)
+    }
+
+    pub async fn record_failed_with_ban(
+        ip: IpAddr,
+        article_id: impl Into<String>,
+        db: &mut DbConn,
+    ) -> Result<(u32, bool), AppError> {
+        let article_id = article_id.into();
+        let count = Self::record_failed(ip, &article_id, db).await?;
+
+        // 计算剩余次数
+        let remaining_times = crate::config::get()
+            .article
+            .unlock_try_max_times
+            .saturating_sub(count);
+
+        if remaining_times == 0 {
+            ArticleUnlockBanBo::ban(ip, &article_id).await?;
+            Ok((remaining_times, true))
+        } else {
+            Ok((remaining_times, false))
         }
     }
 }
