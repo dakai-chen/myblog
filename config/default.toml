@@ -135,7 +135,7 @@ code_themes_source = "default"
 ### 当前使用的页面主题名称
 current_page_theme = "simple"
 ### 当前使用的代码主题名称
-current_code_theme = "Solarized (light)"
+current_code_theme = "base16-ocean.light"
 
 ### ----------------------------------------------------------------------------
 ### 定时任务配置
