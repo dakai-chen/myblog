@@ -29,16 +29,7 @@ impl<S> CronTask<S>
 where
     S: Clone + Send + Sync + 'static,
 {
-    pub fn new<F, Fut>(schedule: impl Into<String>, func: F, state: S) -> Self
-    where
-        F: FnMut(S) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = anyhow::Result<()>> + Send + 'static,
-    {
-        let name = task_function_name(std::any::type_name::<F>());
-        Self::new_with_name(name, schedule, func, state)
-    }
-
-    pub fn new_with_name<F, Fut>(
+    pub fn new<F, Fut>(
         name: impl Into<String>,
         schedule: impl Into<String>,
         func: F,
@@ -81,47 +72,23 @@ where
         if b { self.add_task(task) } else { self }
     }
 
-    pub fn add<F, Fut>(mut self, schedule: &str, func: F) -> Self
+    pub fn add<F, Fut>(mut self, name: impl Into<String>, schedule: &str, func: F) -> Self
     where
         F: FnMut(S) -> Fut + Send + Sync + 'static,
         Fut: Future<Output = anyhow::Result<()>> + Send + 'static,
     {
-        let task = CronTask::new(schedule, func, self.state.clone());
+        let task = CronTask::new(name, schedule, func, self.state.clone());
         self.collector.push(task);
         self
     }
 
-    pub fn add_with_name<F, Fut>(mut self, name: impl Into<String>, schedule: &str, func: F) -> Self
-    where
-        F: FnMut(S) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = anyhow::Result<()>> + Send + 'static,
-    {
-        let task = CronTask::new_with_name(name, schedule, func, self.state.clone());
-        self.collector.push(task);
-        self
-    }
-
-    pub fn add_if<F, Fut>(self, b: bool, schedule: &str, func: F) -> Self
-    where
-        F: FnMut(S) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = anyhow::Result<()>> + Send + 'static,
-    {
-        if b { self.add(schedule, func) } else { self }
-    }
-
-    pub fn add_with_name_if<F, Fut>(
-        self,
-        b: bool,
-        name: impl Into<String>,
-        schedule: &str,
-        func: F,
-    ) -> Self
+    pub fn add_if<F, Fut>(self, b: bool, name: impl Into<String>, schedule: &str, func: F) -> Self
     where
         F: FnMut(S) -> Fut + Send + Sync + 'static,
         Fut: Future<Output = anyhow::Result<()>> + Send + 'static,
     {
         if b {
-            self.add_with_name(name, schedule, func)
+            self.add(name, schedule, func)
         } else {
             self
         }
@@ -158,8 +125,4 @@ where
         }
         Ok(())
     }
-}
-
-pub fn task_function_name(name: &str) -> &str {
-    name.rsplit_once("::").map(|(_, tail)| tail).unwrap_or(name)
 }

@@ -5,7 +5,7 @@ use crate::state::AppState;
 /// 每次清理数据的条数上限
 const PRUNE_LIMIT: u64 = 100;
 
-pub async fn prune_failed_attempts(state: Arc<AppState>) -> anyhow::Result<()> {
+pub async fn prune(state: Arc<AppState>) -> anyhow::Result<()> {
     let mut db = state.db.acquire().await?;
     loop {
         let rows =

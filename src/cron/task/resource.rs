@@ -14,7 +14,7 @@ use crate::util::time::UnixTimestampSecs;
 const FS_BATCH_SIZE: usize = 1000;
 const DB_BATCH_SIZE: usize = 200;
 
-pub async fn purge_orphaned_resources(state: Arc<AppState>) -> anyhow::Result<()> {
+pub async fn purge_orphaned(state: Arc<AppState>) -> anyhow::Result<()> {
     let mut scanner = {
         let dir = &crate::config::get().resource.upload_dir;
         let threshold = crate::config::get().resource.trash_threshold;
