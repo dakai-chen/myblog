@@ -82,9 +82,9 @@ acquire_slow_threshold = "3s"
 ### ----------------------------------------------------------------------------
 [database.pool]
 ### 最小连接数量
-min_connections = 1
+min_connections = 6
 ### 最大连接数量
-max_connections = 1
+max_connections = 6
 ### 连接获取超时时间
 acquire_timeout = "6s"
 ### 连接空闲超时时间
