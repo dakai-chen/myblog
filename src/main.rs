@@ -50,10 +50,11 @@ async fn main() -> anyhow::Result<()> {
     tracing::debug!("{}", serde_json::to_string_pretty(config::get())?);
 
     let state = AppState::from_config(config::get()).await?;
+    crate::storage::db::global_init_pool(state.db.clone())?;
 
     if config::get().database.migrations.auto_migrate {
         let mut db = state.db.acquire().await?;
-        crate::storage::db::init(&mut db).await?;
+        crate::storage::db::init_database_schema(&mut db).await?;
     }
 
     crate::storage::cache::storage::init(state.db.clone())?;

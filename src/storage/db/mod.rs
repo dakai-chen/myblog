@@ -6,6 +6,7 @@ pub mod failed_attempts;
 pub mod resource;
 
 use std::path::Path;
+use std::sync::OnceLock;
 
 use sqlx::sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions};
 use sqlx::{Acquire, AssertSqlSafe, Transaction};
@@ -17,6 +18,18 @@ pub type Db = sqlx::Sqlite;
 pub type DbPool = sqlx::Pool<Db>;
 pub type DbConn = <Db as sqlx::Database>::Connection;
 pub type DbPoolConn = sqlx::pool::PoolConnection<Db>;
+
+static DB_POOL: OnceLock<DbPool> = OnceLock::new();
+
+pub fn global_init_pool(pool: DbPool) -> anyhow::Result<()> {
+    DB_POOL
+        .set(pool)
+        .map_err(|_| anyhow::anyhow!("重复初始化全局数据库连接池"))
+}
+
+pub fn global_get_pool() -> &'static DbPool {
+    DB_POOL.get().expect("全局数据库连接池未初始化")
+}
 
 pub async fn build_pool(config: &DatabaseConfig) -> anyhow::Result<DbPool> {
     let mut conn_opts = config.url.parse::<SqliteConnectOptions>()?;
@@ -47,16 +60,16 @@ pub async fn build_pool(config: &DatabaseConfig) -> anyhow::Result<DbPool> {
 }
 
 /// 初始化数据库
-pub async fn init(db: &mut DbConn) -> anyhow::Result<()> {
+pub async fn init_database_schema(db: &mut DbConn) -> anyhow::Result<()> {
     transaction(db, async |tx| {
-        let sql = build_init_sql()?;
+        let sql = build_init_database_schema_sql()?;
         sqlx::raw_sql(sql).execute(tx as &mut DbConn).await?;
         Ok(())
     })
     .await?
 }
 
-fn build_init_sql() -> anyhow::Result<AssertSqlSafe<String>> {
+fn build_init_database_schema_sql() -> anyhow::Result<AssertSqlSafe<String>> {
     let mut sql = String::new();
     for entry in std::fs::read_dir(&crate::config::get().database.migrations.script_dir)? {
         let path = entry?.path();

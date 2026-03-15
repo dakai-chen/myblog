@@ -83,6 +83,31 @@ pub async fn update(article: &ArticlePo, db: &mut DbConn) -> anyhow::Result<u64>
     .map_err(From::from)
 }
 
+pub async fn update_render_content(
+    id: &str,
+    render_content: &str,
+    render_version: u32,
+    db: &mut DbConn,
+) -> anyhow::Result<u64> {
+    sqlx::query(
+        "
+        UPDATE article SET
+            `render_content` = ?,
+            `render_version` = ?
+        WHERE
+            `id` = ? AND `render_version` < ?
+        ",
+    )
+    .bind(render_content)
+    .bind(render_version)
+    .bind(id)
+    .bind(render_version)
+    .execute(db)
+    .await
+    .map(|res| res.rows_affected())
+    .map_err(From::from)
+}
+
 pub async fn remove(id: &str, db: &mut DbConn) -> anyhow::Result<u64> {
     sqlx::query("DELETE FROM article WHERE id = ?")
         .bind(id)

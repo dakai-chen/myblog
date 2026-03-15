@@ -213,8 +213,10 @@ pub async fn search_article(
         sort: bo.sort.unwrap_or(SearchArticleSort::ByPublishedAtDesc),
     };
 
-    let items = crate::storage::db::article::search(&params, offset, db).await?;
+    let mut items = crate::storage::db::article::search(&params, offset, db).await?;
     let total = crate::storage::db::article::search_count(&params, db).await?;
+
+    batch_refresh_article_render_content(&mut items).await?;
 
     let items = items.into_iter().map(ArticleListItemBo::from).collect();
 
@@ -261,11 +263,7 @@ pub async fn get_article(
         )));
     };
 
-    if article.render_version < crate::markdown::version() {
-        article.render_content = crate::markdown::render(&article.markdown_content)?;
-        article.render_version = crate::markdown::version();
-        crate::storage::db::article::update(&article, db).await?;
-    }
+    refresh_article_render_content(&mut article, db).await?;
 
     if admin.is_some() {
         let details = AdminArticleDetailsBo::from_entities(article, attachments, stats);
@@ -462,4 +460,59 @@ fn truncate_excerpt(plain_content: &str) -> String {
         .chars()
         .take(crate::config::get().article.excerpt_max_length)
         .collect()
+}
+
+async fn refresh_article_render_content(
+    article: &mut ArticlePo,
+    db: &mut DbConn,
+) -> Result<(), AppError> {
+    if article.render_version < crate::markdown::version() {
+        article.render_content = crate::markdown::render(&article.markdown_content)?;
+        article.render_version = crate::markdown::version();
+        crate::storage::db::article::update_render_content(
+            &article.id,
+            &article.render_content,
+            article.render_version,
+            db,
+        )
+        .await?;
+    }
+    Ok(())
+}
+
+async fn batch_refresh_article_render_content(articles: &mut [ArticlePo]) -> Result<(), AppError> {
+    let current_render_version = crate::markdown::version();
+    let mut need_update = Vec::with_capacity(articles.len());
+
+    for article in articles {
+        if article.render_version < current_render_version {
+            article.render_content = crate::markdown::render(&article.markdown_content)?;
+            article.render_version = current_render_version;
+            need_update.push((article.id.clone(), article.render_content.clone()));
+        }
+    }
+
+    tokio::spawn(async move {
+        let mut db = match crate::storage::db::global_get_pool().acquire().await {
+            Ok(db) => db,
+            Err(e) => {
+                tracing::error!("批量更新文章渲染内容，获取数据库连接失败：{e}");
+                return;
+            }
+        };
+        for (id, render_content) in need_update {
+            if let Err(e) = crate::storage::db::article::update_render_content(
+                &id,
+                &render_content,
+                current_render_version,
+                &mut db,
+            )
+            .await
+            {
+                tracing::error!("批量更新文章渲染内容失败：文章ID：{id}，{e}");
+            }
+        }
+    });
+
+    Ok(())
 }
