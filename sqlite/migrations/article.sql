@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS article (
     markdown_content    TEXT    NOT NULL,
     plain_content       TEXT    NOT NULL,
     render_content      TEXT    NOT NULL,
-    render_version      INTEGER NOT NULL,
+    render_version      TEXT    NOT NULL,
     password            TEXT,
     status              TEXT    NOT NULL,
     created_at          INTEGER NOT NULL,

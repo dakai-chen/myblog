@@ -18,7 +18,7 @@ pub struct ArticlePo {
     /// 渲染后的 HTML 结果
     pub render_content: String,
     /// 渲染版本
-    pub render_version: u32,
+    pub render_version: String,
     /// 访问密码
     pub password: Option<String>,
     /// 状态

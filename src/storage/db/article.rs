@@ -86,7 +86,7 @@ pub async fn update(article: &ArticlePo, db: &mut DbConn) -> anyhow::Result<u64>
 pub async fn update_render_content(
     id: &str,
     render_content: &str,
-    render_version: u32,
+    render_version: &str,
     db: &mut DbConn,
 ) -> anyhow::Result<u64> {
     sqlx::query(
@@ -95,7 +95,7 @@ pub async fn update_render_content(
             `render_content` = ?,
             `render_version` = ?
         WHERE
-            `id` = ? AND `render_version` < ?
+            `id` = ? AND `render_version` != ?
         ",
     )
     .bind(render_content)

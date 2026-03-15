@@ -13,8 +13,8 @@ use crate::config::{ThemeCodeSource, ThemeConfig};
 static MARKDOWN_TO_HTML_CONFIG: LazyLock<MarkdownToHtmlConfig> =
     LazyLock::new(|| MarkdownToHtmlConfig::from_config(&crate::config::get().theme).unwrap());
 
-pub fn version() -> u32 {
-    1
+pub fn version() -> &'static str {
+    &crate::config::get().theme.render_version
 }
 
 pub fn render(markdown: &str) -> anyhow::Result<String> {

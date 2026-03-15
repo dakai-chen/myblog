@@ -94,7 +94,7 @@ pub async fn create_article(bo: CreateArticleBo, db: &mut DbConn) -> Result<Arti
             markdown_content: bo.markdown_content,
             plain_content,
             render_content,
-            render_version: crate::markdown::version(),
+            render_version: crate::markdown::version().to_owned(),
             password: bo.password,
             status: bo.status,
             created_at: now,
@@ -132,7 +132,7 @@ pub async fn update_article(bo: UpdateArticleBo, db: &mut DbConn) -> Result<(), 
     if content_changed {
         article.plain_content = clean_markdown_content(&bo.markdown_content);
         article.render_content = crate::markdown::render(&bo.markdown_content)?;
-        article.render_version = crate::markdown::version();
+        article.render_version = crate::markdown::version().to_owned();
         article.excerpt = truncate_excerpt(&article.plain_content);
     }
 
@@ -466,13 +466,13 @@ async fn refresh_article_render_content(
     article: &mut ArticlePo,
     db: &mut DbConn,
 ) -> Result<(), AppError> {
-    if article.render_version < crate::markdown::version() {
+    if article.render_version != crate::markdown::version() {
         article.render_content = crate::markdown::render(&article.markdown_content)?;
-        article.render_version = crate::markdown::version();
+        article.render_version = crate::markdown::version().to_owned();
         crate::storage::db::article::update_render_content(
             &article.id,
             &article.render_content,
-            article.render_version,
+            &article.render_version,
             db,
         )
         .await?;
@@ -481,13 +481,13 @@ async fn refresh_article_render_content(
 }
 
 async fn batch_refresh_article_render_content(articles: &mut [ArticlePo]) -> Result<(), AppError> {
-    let current_render_version = crate::markdown::version();
+    let current_render_version = crate::markdown::version().to_owned();
     let mut need_update = Vec::with_capacity(articles.len());
 
     for article in articles {
-        if article.render_version < current_render_version {
+        if article.render_version != current_render_version {
             article.render_content = crate::markdown::render(&article.markdown_content)?;
-            article.render_version = current_render_version;
+            article.render_version = current_render_version.clone();
             need_update.push((article.id.clone(), article.render_content.clone()));
         }
     }
@@ -504,7 +504,7 @@ async fn batch_refresh_article_render_content(articles: &mut [ArticlePo]) -> Res
             if let Err(e) = crate::storage::db::article::update_render_content(
                 &id,
                 &render_content,
-                current_render_version,
+                &current_render_version,
                 &mut db,
             )
             .await

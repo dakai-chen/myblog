@@ -136,6 +136,8 @@ code_themes_source = "theme"
 current_page_theme = "simple"
 ### 当前使用的代码主题名称
 current_code_theme = "Tomorrow"
+### 渲染版本号
+render_version = "default"
 
 ### ----------------------------------------------------------------------------
 ### 定时任务配置

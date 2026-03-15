@@ -256,6 +256,8 @@ pub struct ThemeConfig {
     pub current_page_theme: String,
     /// 当前使用的代码主题名称
     pub current_code_theme: String,
+    /// 渲染版本号
+    pub render_version: String,
     /// 自定义扩展配置项
     #[serde(default)]
     pub extensions: HashMap<String, String>,
@@ -290,6 +292,7 @@ impl<'de> Deserialize<'de> for ThemeConfig {
             code_themes_source: ThemeCodeSource,
             current_page_theme: String,
             current_code_theme: String,
+            render_version: String,
             #[serde(default)]
             extensions: HashMap<String, String>,
         }
@@ -305,6 +308,7 @@ impl<'de> Deserialize<'de> for ThemeConfig {
             code_themes_source: temp.code_themes_source,
             current_page_theme: temp.current_page_theme,
             current_code_theme: temp.current_code_theme,
+            render_version: temp.render_version,
             extensions: temp.extensions,
             current: current_theme,
             custom: custom_theme,
