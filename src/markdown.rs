@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::sync::LazyLock;
 
 use comrak::Options;
@@ -9,6 +10,8 @@ use syntect::highlighting::ThemeSet;
 use syntect::parsing::SyntaxSet;
 
 use crate::config::{ThemeCodeSource, ThemeConfig};
+
+type BoxStdError = Box<dyn Error + Send + Sync + 'static>;
 
 static MARKDOWN_TO_HTML_CONFIG: LazyLock<MarkdownToHtmlConfig> =
     LazyLock::new(|| MarkdownToHtmlConfig::from_config(&crate::config::get().theme).unwrap());
@@ -87,19 +90,15 @@ fn markdown_plugins(syntect: &SyntectAdapter) -> Plugins<'_> {
 }
 
 fn rewrite_html(html: &str) -> anyhow::Result<String> {
-    let handler = |el: &mut Element| {
-        el.before("<div class=\"table-box\">", ContentType::Html);
-        el.after("</div>", ContentType::Html);
-        Ok(())
+    let settings = RewriteStrSettings {
+        element_content_handlers: vec![element!("table", handle_table)],
+        ..RewriteStrSettings::new()
     };
+    Ok(rewrite_str(html, settings)?)
+}
 
-    let html = rewrite_str(
-        html,
-        RewriteStrSettings {
-            element_content_handlers: vec![element!("table", handler)],
-            ..RewriteStrSettings::new()
-        },
-    )?;
-
-    Ok(html)
+fn handle_table(el: &mut Element) -> Result<(), BoxStdError> {
+    el.before("<div class=\"table-box\">", ContentType::Html);
+    el.after("</div>", ContentType::Html);
+    Ok(())
 }
