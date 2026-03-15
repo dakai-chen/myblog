@@ -148,8 +148,10 @@ pub struct ArticleDetailsVo {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 访问密码
     pub password: Option<String>,
     /// 状态
@@ -178,6 +180,7 @@ impl From<ArticleDetailsBo> for ArticleDetailsVo {
                 title: bo.title,
                 excerpt: bo.excerpt,
                 markdown_content: bo.markdown_content,
+                render_content: bo.render_content,
                 password: None,
                 status: bo.status,
                 created_at: bo.created_at,
@@ -197,6 +200,7 @@ impl From<ArticleDetailsBo> for ArticleDetailsVo {
                 title: bo.title,
                 excerpt: bo.excerpt,
                 markdown_content: bo.markdown_content,
+                render_content: bo.render_content,
                 password: bo.password,
                 status: bo.status,
                 created_at: bo.created_at,
@@ -255,7 +259,7 @@ pub struct UpdateArticleVo {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 状态
     pub status: ArticleStatus,

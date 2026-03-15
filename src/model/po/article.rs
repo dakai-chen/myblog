@@ -11,10 +11,14 @@ pub struct ArticlePo {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 清理标签、格式后的纯文本
     pub plain_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
+    /// 渲染版本
+    pub render_version: u32,
     /// 访问密码
     pub password: Option<String>,
     /// 状态

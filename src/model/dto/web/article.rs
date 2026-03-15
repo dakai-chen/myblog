@@ -110,7 +110,7 @@ impl FromRequest for UnlockArticleDto {
 pub struct CreateArticleSubmitDto {
     /// 标题
     pub title: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 访问密码
     pub password: Option<String>,
@@ -152,7 +152,7 @@ pub struct UpdateArticleSubmitDto {
     pub article_id: String,
     /// 标题
     pub title: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 访问密码
     pub password: Option<String>,

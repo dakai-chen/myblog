@@ -22,7 +22,7 @@ pub struct UnlockArticleBo<'a> {
 pub struct CreateArticleBo {
     /// 标题
     pub title: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 访问密码
     pub password: Option<String>,
@@ -37,7 +37,7 @@ pub struct UpdateArticleBo {
     pub article_id: String,
     /// 标题
     pub title: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 访问密码
     pub password: Option<String>,
@@ -96,8 +96,10 @@ pub struct ArticleListItemBo {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 状态
     pub status: ArticleStatus,
     /// 创建时间
@@ -117,6 +119,7 @@ impl From<ArticlePo> for ArticleListItemBo {
             title: article.title,
             excerpt: article.excerpt,
             markdown_content: article.markdown_content,
+            render_content: article.render_content,
             status: article.status,
             created_at: article.created_at,
             updated_at: article.updated_at,
@@ -152,8 +155,10 @@ pub struct VisitorArticleDetailsBo {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 状态
     pub status: ArticleStatus,
     /// 创建时间
@@ -183,6 +188,7 @@ impl VisitorArticleDetailsBo {
             title: article.title,
             excerpt: article.excerpt,
             markdown_content: article.markdown_content,
+            render_content: article.render_content,
             status: article.status,
             created_at: article.created_at,
             updated_at: article.updated_at,
@@ -204,8 +210,10 @@ pub struct AdminArticleDetailsBo {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 访问密码
     pub password: Option<String>,
     /// 状态
@@ -237,6 +245,7 @@ impl AdminArticleDetailsBo {
             title: article.title,
             excerpt: article.excerpt,
             markdown_content: article.markdown_content,
+            render_content: article.render_content,
             status: article.status,
             created_at: article.created_at,
             updated_at: article.updated_at,
@@ -340,10 +349,12 @@ pub struct ArticleBo {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 清理标签、格式后的纯文本
     pub plain_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 访问密码
     pub password: Option<String>,
     /// 状态
@@ -364,6 +375,7 @@ impl From<ArticlePo> for ArticleBo {
             excerpt: value.excerpt,
             markdown_content: value.markdown_content,
             plain_content: value.plain_content,
+            render_content: value.render_content,
             password: value.password,
             status: value.status,
             created_at: value.created_at,

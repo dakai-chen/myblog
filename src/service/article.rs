@@ -85,6 +85,7 @@ pub async fn unlock_article(
 pub async fn create_article(bo: CreateArticleBo, db: &mut DbConn) -> Result<ArticleBo, AppError> {
     crate::storage::db::transaction(db, async |tx| {
         let plain_content = clean_markdown_content(&bo.markdown_content);
+        let render_content = crate::markdown::render(&bo.markdown_content)?;
         let now = UnixTimestampSecs::now().as_i64();
         let article = ArticlePo {
             id: crate::util::uuid::v4(),
@@ -92,6 +93,8 @@ pub async fn create_article(bo: CreateArticleBo, db: &mut DbConn) -> Result<Arti
             excerpt: truncate_excerpt(&plain_content),
             markdown_content: bo.markdown_content,
             plain_content,
+            render_content,
+            render_version: crate::markdown::version(),
             password: bo.password,
             status: bo.status,
             created_at: now,
@@ -128,6 +131,8 @@ pub async fn update_article(bo: UpdateArticleBo, db: &mut DbConn) -> Result<(), 
 
     if content_changed {
         article.plain_content = clean_markdown_content(&bo.markdown_content);
+        article.render_content = crate::markdown::render(&bo.markdown_content)?;
+        article.render_version = crate::markdown::version();
         article.excerpt = truncate_excerpt(&article.plain_content);
     }
 
@@ -226,7 +231,7 @@ pub async fn get_article(
     bo: &GetArticleBo<'_>,
     db: &mut DbConn,
 ) -> Result<Option<ArticleDetailsBo>, AppError> {
-    let Some(article) = crate::storage::db::article::find(&bo.article_id, db).await? else {
+    let Some(mut article) = crate::storage::db::article::find(&bo.article_id, db).await? else {
         return Ok(None);
     };
     if admin.is_none() && !bo.ignore_status && article.status != ArticleStatus::Published {
@@ -255,6 +260,12 @@ pub async fn get_article(
             article.id
         )));
     };
+
+    if article.render_version < crate::markdown::version() {
+        article.render_content = crate::markdown::render(&article.markdown_content)?;
+        article.render_version = crate::markdown::version();
+        crate::storage::db::article::update(&article, db).await?;
+    }
 
     if admin.is_some() {
         let details = AdminArticleDetailsBo::from_entities(article, attachments, stats);

@@ -11,8 +11,10 @@ pub struct FeedListItemVo {
     pub article_id: String,
     /// 标题
     pub title: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: Option<String>,
+    /// 渲染后的 HTML 结果
+    pub render_content: Option<String>,
     /// 状态
     pub status: ArticleStatus,
     /// 创建时间
@@ -31,6 +33,7 @@ impl From<ArticleListItemBo> for FeedListItemVo {
             article_id: value.article_id,
             title: value.title,
             markdown_content: (!value.need_password).then_some(value.markdown_content),
+            render_content: (!value.need_password).then_some(value.render_content),
             status: value.status,
             created_at: value.created_at,
             updated_at: value.updated_at,

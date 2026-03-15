@@ -7,8 +7,10 @@ use crate::template::render::TemplateRenderData;
 /// 关于页面
 #[derive(Debug, Clone, Serialize)]
 pub struct AboutVo {
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 附件列表
     pub attachments: Vec<ArticleAttachmentVo>,
 }
@@ -17,6 +19,7 @@ impl Default for AboutVo {
     fn default() -> Self {
         Self {
             markdown_content: String::new(),
+            render_content: String::new(),
             attachments: vec![],
         }
     }
@@ -27,6 +30,7 @@ impl From<ArticleDetailsBo> for AboutVo {
         match value {
             ArticleDetailsBo::Visitor(bo) => Self {
                 markdown_content: bo.markdown_content,
+                render_content: bo.render_content,
                 attachments: bo
                     .attachments
                     .into_iter()
@@ -35,6 +39,7 @@ impl From<ArticleDetailsBo> for AboutVo {
             },
             ArticleDetailsBo::Admin(bo) => Self {
                 markdown_content: bo.markdown_content,
+                render_content: bo.render_content,
                 attachments: bo
                     .attachments
                     .into_iter()

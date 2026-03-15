@@ -11,7 +11,7 @@
 <!-- 文章 -->
 <article class="article">
     <div class="article-main markdown">
-        {{ context.markdown_content | markdown_to_html | safe }}
+        {{ context.render_content | safe }}
     </div>
     <!-- 附件 -->
     {% if context.attachments %}

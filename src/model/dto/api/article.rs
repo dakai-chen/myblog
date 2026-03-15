@@ -39,7 +39,7 @@ impl<'a> Into<UnlockArticleBo<'a>> for UnlockArticleDto {
 pub struct CreateArticleDto {
     /// 标题
     pub title: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 访问密码
     pub password: Option<String>,
@@ -65,7 +65,7 @@ pub struct UpdateArticleDto {
     pub article_id: String,
     /// 标题
     pub title: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
     /// 访问密码
     pub password: Option<String>,
@@ -209,8 +209,10 @@ pub struct VisitorArticleDetailsDto {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 状态
     pub status: ArticleStatus,
     /// 创建时间
@@ -236,6 +238,7 @@ impl From<VisitorArticleDetailsBo> for VisitorArticleDetailsDto {
             title: value.title,
             excerpt: value.excerpt,
             markdown_content: value.markdown_content,
+            render_content: value.render_content,
             status: value.status,
             created_at: value.created_at,
             updated_at: value.updated_at,
@@ -261,8 +264,10 @@ pub struct AdminArticleDetailsDto {
     pub title: String,
     /// 摘要
     pub excerpt: String,
-    /// 存储 Markdown 格式的正文
+    /// Markdown 格式的正文
     pub markdown_content: String,
+    /// 渲染后的 HTML 结果
+    pub render_content: String,
     /// 访问密码
     pub password: Option<String>,
     /// 状态
@@ -290,6 +295,7 @@ impl From<AdminArticleDetailsBo> for AdminArticleDetailsDto {
             title: value.title,
             excerpt: value.excerpt,
             markdown_content: value.markdown_content,
+            render_content: value.render_content,
             password: value.password,
             status: value.status,
             created_at: value.created_at,

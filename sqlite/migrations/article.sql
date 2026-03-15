@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS article (
     excerpt             TEXT    NOT NULL,
     markdown_content    TEXT    NOT NULL,
     plain_content       TEXT    NOT NULL,
+    render_content      TEXT    NOT NULL,
+    render_version      INTEGER NOT NULL,
     password            TEXT,
     status              TEXT    NOT NULL,
     created_at          INTEGER NOT NULL,

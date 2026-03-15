@@ -18,7 +18,7 @@
         </author>
         <content type="html">
             {% if not article.need_password %}
-            {{ article.markdown_content | markdown_to_html }}
+            {{ article.render_content }}
             {% else %}
             {{ "🔒 文章内容需要解锁查看" }}
             {% endif %}

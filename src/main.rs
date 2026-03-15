@@ -7,6 +7,7 @@ mod cron;
 mod error;
 mod jwt;
 mod logger;
+mod markdown;
 mod middleware;
 mod model;
 mod response;

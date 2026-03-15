@@ -18,12 +18,14 @@ pub async fn create(article: &ArticlePo, db: &mut DbConn) -> anyhow::Result<()> 
             `excerpt`,
             `markdown_content`,
             `plain_content`,
+            `render_content`,
+            `render_version`,
             `password`,
             `status`,
             `created_at`,
             `updated_at`,
             `published_at`
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ",
     )
     .bind(&article.id)
@@ -31,6 +33,8 @@ pub async fn create(article: &ArticlePo, db: &mut DbConn) -> anyhow::Result<()> 
     .bind(&article.excerpt)
     .bind(&article.markdown_content)
     .bind(&article.plain_content)
+    .bind(&article.render_content)
+    .bind(&article.render_version)
     .bind(&article.password)
     .bind(&article.status)
     .bind(&article.created_at)
@@ -50,6 +54,8 @@ pub async fn update(article: &ArticlePo, db: &mut DbConn) -> anyhow::Result<u64>
             `excerpt` = ?,
             `markdown_content` = ?,
             `plain_content` = ?,
+            `render_content` = ?,
+            `render_version` = ?,
             `password` = ?,
             `status` = ?,
             `created_at` = ?,
@@ -63,6 +69,8 @@ pub async fn update(article: &ArticlePo, db: &mut DbConn) -> anyhow::Result<u64>
     .bind(&article.excerpt)
     .bind(&article.markdown_content)
     .bind(&article.plain_content)
+    .bind(&article.render_content)
+    .bind(&article.render_version)
     .bind(&article.password)
     .bind(&article.status)
     .bind(&article.created_at)
