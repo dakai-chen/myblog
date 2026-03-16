@@ -483,7 +483,7 @@ a.btn:active {
 
 .article .article-title {
     word-break: break-all;
-    padding-bottom: 0.5rem;
+    padding-bottom: 1rem;
     border-bottom: var(--blog-border-size) solid var(--color-border);
     font-weight: normal;
 }
@@ -493,7 +493,7 @@ a.btn:active {
     flex-wrap: wrap;
     gap: 0.75rem;
     align-items: center;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     font-size: 0.875rem;
     color: var(--color-text-secondary);
 }
