@@ -21,7 +21,7 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y tzdata && \
+    apt-get install -y --no-install-recommends tzdata && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/config ./config
