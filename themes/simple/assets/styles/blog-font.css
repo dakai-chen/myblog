@@ -1,6 +1,37 @@
 :root {
-    --blog-font-family-text: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --blog-font-family-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --blog-font-family-text:
+        -apple-system,
+        BlinkMacSystemFont,
+        system-ui,
+        ui-sans-serif,
+        "PingFang SC",
+        "Hiragino Sans GB",
+        "Helvetica Neue",
+        "Segoe UI Variable",
+        "Segoe UI",
+        "Microsoft YaHei UI",
+        "Microsoft YaHei",
+        "微软雅黑",
+        "Noto Sans CJK SC",
+        "WenQuanYi Micro Hei",
+        Roboto,
+        Arial,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol";
+
+    --blog-font-family-code:
+        "SF Mono",
+        SFMono-Regular,
+        "Menlo",
+        "Monaco",
+        "Consolas",
+        "Microsoft YaHei Mono",
+        "SimHei",
+        "DejaVu Sans Mono",
+        "Courier New",
+        monospace;
 }
 
 *,
@@ -8,12 +39,20 @@
 ::before {
     font-family: inherit;
     font-variant-ligatures: none;
+    /* 苹果设备抗锯齿，更顺滑 */
+    -webkit-font-smoothing: antialiased;
+    /* 火狐抗锯齿 */
+    -moz-osx-font-smoothing: grayscale;
+    /* 优化字符间距和连字 */
+    text-rendering: optimizeLegibility;
 }
 
 body {
     font-family: var(--blog-font-family-text);
 }
 
-pre code {
+pre,
+code,
+.code-block-box {
     font-family: var(--blog-font-family-code);
 }
