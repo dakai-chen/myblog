@@ -15,7 +15,7 @@
 }
 
 .markdown {
-    line-height: 1.75;
+    line-height: 1.8;
     color: var(--color-text);
 }
 
@@ -26,17 +26,17 @@
 .markdown h5,
 .markdown h6 {
     margin: 1.5rem 0;
-    font-weight: normal;
-    color: var(--color-border);
+    font-weight: bold;
+    color: var(--color-text);
     line-height: 1.5;
 }
 
 .markdown h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .markdown h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
 }
 
 .markdown h3 {
@@ -44,15 +44,15 @@
 }
 
 .markdown h4 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
 }
 
 .markdown h5 {
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 .markdown h6 {
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 .markdown h1 .anchor,

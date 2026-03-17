@@ -1,6 +1,6 @@
 :root {
-    --blog-font-family-text: -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Arial, sans-serif;
-    --blog-font-family-code: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
+    --blog-font-family-text: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --blog-font-family-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 *,
