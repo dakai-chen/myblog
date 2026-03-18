@@ -166,11 +166,11 @@
     color: var(--color-text-secondary);
 }
 
-.markdown blockquote>p:first-child {
+.markdown blockquote>*:first-child {
     margin-top: 0 !important;
 }
 
-.markdown blockquote>p:last-child {
+.markdown blockquote>*:last-child {
     margin-bottom: 0 !important;
 }
 
@@ -180,14 +180,12 @@
 .markdown blockquote b,
 .markdown blockquote em,
 .markdown blockquote i,
-.markdown blockquote a,
-.markdown blockquote code,
-.markdown blockquote pre {
-    color: inherit !important;
+.markdown blockquote code {
+    color: inherit;
 }
 
-.markdown blockquote a {
-    color: var(--color-primary) !important;
+.markdown blockquote pre * {
+    color: initial;
 }
 
 .markdown blockquote blockquote {
