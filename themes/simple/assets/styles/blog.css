@@ -408,6 +408,7 @@ a.btn:active {
 
 .pagination a.active {
     text-decoration: underline;
+    text-decoration-thickness: 2px;
 }
 
 .pagination a.disabled {
