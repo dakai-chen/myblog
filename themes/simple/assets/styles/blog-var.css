@@ -73,9 +73,9 @@
     --blog-a-visited-hover: var(--color-link-visited);
     --blog-a-visited-active: var(--color-link-visited-h);
 
-    --blog-a-disabled-color: var(--color-text-disabled);
-    --blog-a-disabled-hover: var(--color-text-disabled);
-    --blog-a-disabled-active: var(--color-text-secondary);
+    --blog-a-disabled-color: var(--color-text-secondary);
+    --blog-a-disabled-hover: var(--color-text-secondary);
+    --blog-a-disabled-active: #000;
 
     /* 错误提示框 */
     --blog-alert-color-bg: var(--color-warning-bg);
