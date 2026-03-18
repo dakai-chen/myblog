@@ -10,6 +10,11 @@
 
 {% block title %}{{ context.title }}{% endblock title %}
 
+{% block styles %}
+{{ super() }}
+<link href="/theme/assets/styles/blog-print.css" rel="stylesheet">
+{% endblock styles %}
+
 {% block breadcrumb %}
 <li><a href="/">首页</a></li>
 <li><a href="/articles">文章</a></li>

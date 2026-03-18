@@ -1,0 +1,21 @@
+@media print {
+
+    pre,
+    code {
+        overflow: visible !important;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+    }
+
+    .markdown .code-copy-btn {
+        display: none !important;
+    }
+
+    .container header {
+        display: none !important;
+    }
+
+    .container footer {
+        display: none !important;
+    }
+}

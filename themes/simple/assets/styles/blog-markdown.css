@@ -383,17 +383,3 @@
 .markdown li:has(> input[type="checkbox"]) {
     list-style-type: none;
 }
-
-@media print {
-
-    pre,
-    code {
-        overflow: visible !important;
-        white-space: pre-wrap !important;
-        word-wrap: break-word !important;
-    }
-
-    .code-copy-btn {
-        display: none !important;
-    }
-}
