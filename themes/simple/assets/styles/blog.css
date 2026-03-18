@@ -153,7 +153,7 @@ a.btn:active {
 
 .container {
     max-width: var(--blog-container-max-width);
-    padding: 0 0.75rem;
+    padding: 0 16px;
     margin: 1rem auto 2rem auto;
 }
 
