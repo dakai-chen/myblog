@@ -140,13 +140,13 @@
     --color-md-title: var(--color-text);
     --color-md-metadata: var(--color-text-secondary);
 
-    --color-md-hr: #000;
-    --color-md-table-border: var(--color-border-secondary);
+    --color-md-hr: var(--color-border);
+    --color-md-table-border: var(--color-border);
 
     --color-md-code-bg: var(--color-bg);
     --color-md-code-border: var(--color-border-secondary);
 
-    --color-md-code-block-border: var(--color-border-secondary);
+    --color-md-code-block-border: var(--color-border);
     --color-md-code-block-header-bg: var(--color-md-code-bg);
 
     --color-md-spoiler-bg: #dcdcdc;
