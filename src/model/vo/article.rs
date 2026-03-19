@@ -122,7 +122,13 @@ pub struct ArticleListVo {
 
 impl ArticleListVo {
     pub fn from(bo: ArticleListBo, search: SearchArticleDto) -> Result<Self, AppError> {
-        let page_navigation = PageNavigation::new(&bo.data, bo.page, 5, 999)?;
+        let config = &crate::config::get().article.pagination;
+        let page_navigation = PageNavigation::new(
+            &bo.data,
+            bo.page,
+            config.page_nav_max_visible,
+            config.max_page_number,
+        )?;
         Ok(ArticleListVo {
             items: bo
                 .data

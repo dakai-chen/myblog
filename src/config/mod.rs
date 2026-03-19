@@ -416,6 +416,8 @@ pub struct ArticleConfig {
     /// 作为 About 页面的文章
     #[serde(default)]
     pub about_article_id: Option<String>,
+    /// 文章分页配置
+    pub pagination: ArticlePaginationConfig,
 }
 
 /// 游客配置
@@ -427,4 +429,17 @@ pub struct VisitorConfig {
     /// 游客会话自动续期的触发阈值
     #[serde(with = "humantime_serde")]
     pub session_keep_threshold: Duration,
+}
+
+/// 文章分页配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ArticlePaginationConfig {
+    /// 最大页码值
+    pub max_page_number: u64,
+    /// 默认分页大小
+    pub default_page_size: u64,
+    /// 分页大小允许的值列表
+    pub allowed_page_sizes: Vec<u64>,
+    /// 分页导航栏显示的页码数量
+    pub page_nav_max_visible: u64,
 }

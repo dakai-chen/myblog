@@ -73,9 +73,10 @@ pub struct SearchArticleBo<'a> {
 
 impl SearchArticleBo<'_> {
     pub fn page(&self) -> Result<Page, AppError> {
+        let config = &crate::config::get().article.pagination;
         OptionalPage::new(self.page, self.size)
-            .with_defaults(1, 20)
-            .validate(1..1000, [10, 20, 30, 40, 50])
+            .with_defaults(1, config.default_page_size)
+            .validate(1..=config.max_page_number, &*config.allowed_page_sizes)
             .map_err(From::from)
     }
 
