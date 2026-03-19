@@ -28,7 +28,7 @@
             {{ article.title }}
         </a>
         {% else %}
-        <a class="article-title a-article-hide" title="{{ article.title }}" href="/articles/{{ article.article_id }}"
+        <a class="article-title a-disabled" title="{{ article.title }}" href="/articles/{{ article.article_id }}"
             rel="nofollow">
             {{ article.title }}
         </a>
@@ -39,7 +39,7 @@
             {{ article.title }}
         </a>
         {% else %}
-        <a class="article-title a-article-hide" title="{{ article.title }}" href="/articles/{{ article.article_id }}">
+        <a class="article-title a-disabled" title="{{ article.title }}" href="/articles/{{ article.article_id }}">
             {{ article.title }}
         </a>
         {% endif %}

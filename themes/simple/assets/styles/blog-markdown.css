@@ -16,7 +16,7 @@
 
 .markdown {
     line-height: 1.8;
-    color: var(--color-text);
+    color: var(--color-md-text);
 }
 
 .markdown h1,
@@ -25,7 +25,7 @@
 .markdown h4,
 .markdown h5,
 .markdown h6 {
-    color: var(--color-text);
+    color: var(--color-md-title);
     font-weight: bold;
 }
 
@@ -80,7 +80,25 @@
 .markdown h4 .anchor::before,
 .markdown h5 .anchor::before,
 .markdown h6 .anchor::before {
-    color: var(--color-primary);
+    color: var(--color-link);
+}
+
+.markdown h1 .anchor::before:hover,
+.markdown h2 .anchor::before:hover,
+.markdown h3 .anchor::before:hover,
+.markdown h4 .anchor::before:hover,
+.markdown h5 .anchor::before:hover,
+.markdown h6 .anchor::before:hover {
+    color: var(--color-link-hover);
+}
+
+.markdown h1 .anchor::before:active,
+.markdown h2 .anchor::before:active,
+.markdown h3 .anchor::before:active,
+.markdown h4 .anchor::before:active,
+.markdown h5 .anchor::before:active,
+.markdown h6 .anchor::before:active {
+    color: var(--color-link-active);
 }
 
 .markdown h1 .anchor::before {
@@ -120,7 +138,7 @@
 .markdown hr {
     margin: 1.5rem 0;
     border: none;
-    border-top: var(--blog-border-size) solid var(--color-border);
+    border-top: 1px solid var(--color-md-hr);
 }
 
 .markdown ul,
@@ -169,23 +187,23 @@
 }
 
 .markdown table tr {
-    border: 1px solid var(--color-border-light);
+    border: 1px solid var(--color-md-table-border);
 }
 
 .markdown thead {
-    background-color: var(--color-bg-light);
+    background-color: var(--color-bg);
 }
 
 .markdown table th {
     font-weight: bold;
-    color: var(--color-border);
-    border: 1px solid var(--color-border-light);
+    color: var(--color-md-text);
+    border: 1px solid var(--color-md-table-border);
     padding: 0.375rem 0.75rem;
     text-align: left;
 }
 
 .markdown table td {
-    border: 1px solid var(--color-border-light);
+    border: 1px solid var(--color-md-table-border);
     padding: 0.375rem 0.75rem;
 }
 
@@ -194,8 +212,8 @@
     font-size: 1rem;
     border-radius: 4px;
     padding: 0.125rem 0.375rem;
-    background-color: #f8f8f8;
-    border: 1px solid #a7a7a7;
+    background-color: var(--color-md-code-bg);
+    border: 1px solid var(--color-md-code-border);
 }
 
 .markdown pre>code {
@@ -205,7 +223,7 @@
     background-color: transparent;
     line-height: 1.5;
     border-radius: 0;
-    border: var(--blog-border-size) solid var(--color-border);
+    border: 1px solid var(--color-md-code-block-border);
 }
 
 .markdown img {
@@ -222,13 +240,13 @@
 
 .markdown .spoiler {
     color: transparent;
-    background-color: var(--color-highlight);
+    background-color: var(--color-md-spoiler-bg);
     transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .markdown .spoiler:hover {
-    color: var(--color-text);
-    background-color: var(--color-highlight);
+    color: var(--color-md-spoiler-hover-text);
+    background-color: var(--color-md-spoiler-hover-bg);
 }
 
 .markdown dd {
@@ -236,14 +254,14 @@
 }
 
 /*******************************************************************************
- * 引用块
+ * 引用块 (Blockquote)
  ******************************************************************************/
 
 .markdown blockquote {
-    border-left: 0.25rem solid var(--color-gray-300);
-    background-color: #F3F3F3;
+    border-left: 0.25rem solid var(--color-md-blockquote-border);
+    background-color: var(--color-md-blockquote-bg);
     padding: 0.375rem 1rem;
-    color: var(--color-text-secondary);
+    color: var(--color-md-text);
 }
 
 .markdown blockquote>*:first-child {
@@ -273,7 +291,7 @@
 }
 
 /*******************************************************************************
- * 代码块
+ * 代码块头部 (Code Block Header)
  ******************************************************************************/
 
 .markdown .code-block-box {
@@ -285,11 +303,11 @@
     display: flex;
     padding: 0.125rem 0.75rem;
     justify-content: space-between;
-    background-color: #f8f8f8;
+    background-color: var(--color-md-code-block-header-bg);
     font-size: 0.875rem;
-    border: var(--blog-border-size) solid var(--color-border);
+    border: 1px solid var(--color-md-code-block-border);
     border-bottom: none;
-    color: var(--color-text);
+    color: var(--color-md-text);
     align-items: center;
 }
 
@@ -305,11 +323,11 @@
 }
 
 .markdown .code-copy-btn:hover {
-    background-color: #DCDCDC;
+    background-color: var(--color-md-code-copy-hover-bg);
 }
 
 .markdown .code-copy-btn:active {
-    background-color: #c9c9c9;
+    background-color: var(--color-md-code-copy-active-bg);
 }
 
 .markdown .code-copy-btn::before {
@@ -326,7 +344,7 @@
 }
 
 /*******************************************************************************
- * 滚动条
+ * 滚动条 (Scrollbar)
  ******************************************************************************/
 
 .markdown pre>code::-webkit-scrollbar {
@@ -335,27 +353,27 @@
 }
 
 .markdown pre>code::-webkit-scrollbar-track {
-    background: var(--color-gray-200);
+    background: var(--color-scrollbar-track-bg);
     border-radius: 3px;
 }
 
 .markdown pre>code::-webkit-scrollbar-thumb {
-    background: var(--color-gray-400);
+    background: var(--color-scrollbar-thumb-bg);
     border-radius: 3px;
     transition: background 0.2s ease;
 }
 
 .markdown pre>code::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gray-500);
+    background: var(--color-scrollbar-thumb-hover-bg);
 }
 
 .markdown pre>code {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-gray-400) var(--color-gray-200);
+    scrollbar-color: var(--color-scrollbar-thumb-bg) var(--color-scrollbar-track-bg);
 }
 
 /*******************************************************************************
- * 列表复选框
+ * 复选框 (Checkbox)
  ******************************************************************************/
 
 .markdown li>input[type="checkbox"] {
@@ -366,8 +384,8 @@
     height: 0.75rem;
     margin-right: 0.25rem;
     margin-left: -1.25rem;
-    border: 1px solid var(--color-gray-300);
-    background: var(--color-gray-100);
+    border: 1px solid var(--color-md-checkbox-border);
+    background: var(--color-md-checkbox-bg);
     outline: none;
 }
 
@@ -379,7 +397,7 @@
     transform: translate(-50%, -50%);
     width: 0.375rem;
     height: 0.375rem;
-    background-color: var(--color-gray-600);
+    background-color: var(--color-md-checkbox-checked-bg);
 }
 
 .markdown li:has(> input[type="checkbox"]) {

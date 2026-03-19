@@ -14,7 +14,7 @@
 }
 
 body {
-    background-color: var(--color-bg-white);
+    background-color: var(--color-body-bg);
     color: var(--color-text);
     line-height: 1.5;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -37,19 +37,19 @@ a {
 }
 
 a:link {
-    color: var(--blog-a-normal-color);
+    color: var(--color-link);
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
 }
 
 a:visited {
-    color: var(--blog-a-normal-color);
+    color: var(--color-link);
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
 }
 
 a:hover {
-    color: var(--blog-a-normal-hover);
+    color: var(--color-link-hover);
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
     text-decoration: underline;
@@ -57,7 +57,7 @@ a:hover {
 }
 
 a:active {
-    color: var(--blog-a-normal-active);
+    color: var(--color-link-active);
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
 }
@@ -87,21 +87,21 @@ textarea:focus {
 button {
     user-select: none;
     outline: none;
-    font-size: 1rem;
-    padding: var(--blog-btn-padding);
-    border: var(--blog-border-size) solid var(--color-border);
-    color: var(--blog-btn-color);
-    background-color: var(--blog-btn-color-bg);
+    font-size: var(--layout-btn-font-size);
+    padding: var(--layout-btn-padding);
+    border: var(--layout-btn-border-size) solid var(--color-btn-border);
+    color: var(--color-btn-text);
+    background-color: var(--color-btn-bg);
 }
 
 button:hover {
-    color: var(--blog-btn-color-hover);
-    background-color: var(--blog-btn-color-hover-bg);
+    color: var(--color-btn-hover-text);
+    background-color: var(--color-btn-hover-bg);
 }
 
 button:active {
-    color: var(--blog-btn-color);
-    background-color: var(--blog-btn-color-bg);
+    color: var(--color-btn-active-text);
+    background-color: var(--color-btn-active-bg);
 }
 
 /*******************************************************************************
@@ -110,41 +110,41 @@ button:active {
 
 label.btn {
     display: block;
-    font-size: 1rem;
-    padding: var(--blog-btn-padding);
-    border: var(--blog-border-size) solid var(--color-border);
-    color: var(--blog-btn-color);
-    background-color: var(--blog-btn-color-bg);
+    font-size: var(--layout-btn-font-size);
+    padding: var(--layout-btn-padding);
+    border: var(--layout-btn-border-size) solid var(--color-btn-border);
+    color: var(--color-btn-text);
+    background-color: var(--color-btn-bg);
 }
 
 label.btn:hover {
-    color: var(--blog-btn-color-hover);
-    background-color: var(--blog-btn-color-hover-bg);
+    color: var(--color-btn-hover-text);
+    background-color: var(--color-btn-hover-bg);
 }
 
 label.btn:active {
-    color: var(--blog-btn-color);
-    background-color: var(--blog-btn-color-bg);
+    color: var(--color-btn-active-text);
+    background-color: var(--color-btn-active-bg);
 }
 
 a.btn {
     display: block;
-    font-size: 1rem;
-    padding: var(--blog-btn-padding);
-    border: var(--blog-border-size) solid var(--color-border);
-    color: var(--blog-btn-color);
-    background-color: var(--blog-btn-color-bg);
+    font-size: var(--layout-btn-font-size);
+    padding: var(--layout-btn-padding);
+    border: var(--layout-btn-border-size) solid var(--color-btn-border);
+    color: var(--color-btn-text);
+    background-color: var(--color-btn-bg);
 }
 
 a.btn:hover {
-    color: var(--blog-btn-color-hover);
-    background-color: var(--blog-btn-color-hover-bg);
+    color: var(--color-btn-hover-text);
+    background-color: var(--color-btn-hover-bg);
     text-decoration: none;
 }
 
 a.btn:active {
-    color: var(--blog-btn-color);
-    background-color: var(--blog-btn-color-bg);
+    color: var(--color-btn-active-text);
+    background-color: var(--color-btn-active-bg);
 }
 
 /*******************************************************************************
@@ -152,9 +152,9 @@ a.btn:active {
  ******************************************************************************/
 
 .container {
-    max-width: var(--blog-container-max-width);
-    padding: 0 16px;
-    margin: 1rem auto 2rem auto;
+    max-width: var(--layout-container-max-width);
+    padding: var(--layout-container-padding);
+    margin: 0 auto;
 }
 
 /*******************************************************************************
@@ -165,7 +165,7 @@ a.btn:active {
     display: flex;
     flex-direction: column;
     padding-bottom: 0.5rem;
-    border-bottom: 0.2rem solid var(--color-border);
+    border-bottom: 0.2rem solid var(--color-header-border);
 }
 
 /*******************************************************************************
@@ -174,7 +174,7 @@ a.btn:active {
 
 .container>footer {
     padding-top: 0.5rem;
-    border-top: 0.2rem solid var(--color-border);
+    border-top: 0.2rem solid var(--color-footer-border);
 }
 
 /*******************************************************************************
@@ -198,9 +198,9 @@ a.btn:active {
     font-size: 1.75rem;
     align-items: center;
     gap: 0.75rem;
-    border: 2px solid var(--color-border);
+    border: 2px solid var(--color-logo-border);
     padding: 0.5rem 0;
-    background-color: var(--color-bg-light);
+    background-color: var(--color-logo-bg);
     white-space: nowrap;
 }
 
@@ -236,19 +236,19 @@ a.btn:active {
 .breadcrumb>ol>li:not(:last-child)::after {
     content: "/";
     padding: 0 0.375rem;
-    color: var(--color-text-secondary);
+    color: var(--color-breadcrumb-delimiter);
 }
 
 .breadcrumb>ol>li:last-child a {
-    --blog-a-normal-color: var(--color-text-secondary);
-    --blog-a-normal-hover: var(--color-text-secondary);
-    --blog-a-normal-active: var(--color-text-secondary);
+    --color-link-text: var(--color-breadcrumb-disabled);
+    --color-link-text-hover: var(--color-breadcrumb-disabled);
+    --color-link-text-active: var(--color-breadcrumb-disabled);
 
     pointer-events: none;
 }
 
 .breadcrumb>ol>li span {
-    color: var(--color-text-secondary);
+    color: var(--color-breadcrumb-disabled);
 }
 
 /*******************************************************************************
@@ -265,11 +265,11 @@ a.btn:active {
 .menu>li:not(:first-child)::before {
     content: "|";
     padding: 0 0.375rem;
-    color: var(--color-text-secondary);
+    color: var(--color-menu-delimiter);
 }
 
 .menu .disabled {
-    color: var(--color-text-secondary);
+    color: var(--color-menu-disabled);
 }
 
 /*******************************************************************************
@@ -308,7 +308,7 @@ a.btn:active {
 }
 
 .form-input-group>* {
-    border: var(--blog-border-size) solid var(--color-border);
+    border: 1px solid var(--color-form-border);
 }
 
 .form-input-group>*:not(:first-child) {
@@ -317,8 +317,8 @@ a.btn:active {
 
 .form-input-group>label {
     padding: 0.375rem 0.75rem;
-    color: var(--color-text);
-    background-color: var(--color-bg-light);
+    color: var(--color-form-label-text);
+    background-color: var(--color-form-label-bg);
 }
 
 .form-input-group>input {
@@ -329,7 +329,7 @@ a.btn:active {
     font-weight: normal;
     line-height: 1.5;
     padding: 0.375rem 0.75rem;
-    color: var(--color-text);
+    color: var(--color-form-text);
 }
 
 .form-input-group>textarea {
@@ -340,7 +340,7 @@ a.btn:active {
     font-weight: normal;
     line-height: 1.5;
     padding: 0.375rem 0.75rem;
-    color: var(--color-text);
+    color: var(--color-form-text);
     resize: vertical;
     min-height: calc(1.5rem + 0.75rem + 2px);
 }
@@ -359,7 +359,7 @@ a.btn:active {
     display: flex;
     align-items: center;
     padding: 0.375rem 0.75rem;
-    color: var(--color-text);
+    color: var(--color-form-text);
 }
 
 .form-radio-group-item input[type=radio] {
@@ -378,9 +378,9 @@ a.btn:active {
 .alert {
     display: flex;
     flex-direction: column;
-    background-color: var(--blog-alert-color-bg);
+    background-color: var(--color-alert-bg);
     padding: 1rem;
-    border: var(--blog-border-size) solid var(--blog-alert-color-border);
+    border: 1px solid var(--color-alert-border);
 }
 
 .alert>*:not(:first-child) {
@@ -394,7 +394,7 @@ a.btn:active {
 .pagination {
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: var(--blog-border-size) solid var(--color-border);
+    border-top: 1px solid var(--color-border);
 }
 
 .pagination>ul {
@@ -413,7 +413,7 @@ a.btn:active {
 
 .pagination a.disabled {
     pointer-events: none;
-    color: var(--color-text-secondary);
+    color: var(--color-pagination-link-disabled);
 }
 
 /*******************************************************************************
@@ -449,23 +449,23 @@ a.btn:active {
     white-space: nowrap;
     flex: 1 1 auto;
     text-align: right;
-    color: var(--color-text-secondary);
+    color: var(--color-article-list-date);
 }
 
-.article-list>li>a:visited:not(.a-article-hide) {
-    color: var(--blog-a-visited-color);
+.article-list>li>a:visited:not(.a-disabled) {
+    color: var(--color-link-visited);
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
 }
 
-.article-list>li>a:visited:hover:not(.a-article-hide) {
-    color: var(--blog-a-visited-hover);
+.article-list>li>a:visited:hover:not(.a-disabled) {
+    color: var(--color-link-visited-hover);
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
 }
 
-.article-list>li>a:visited:active:not(.a-article-hide) {
-    color: var(--blog-a-visited-active);
+.article-list>li>a:visited:active:not(.a-disabled) {
+    color: var(--color-link-visited-active);
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
 }
@@ -488,9 +488,10 @@ a.btn:active {
 .article .article-title {
     word-break: break-all;
     padding-bottom: 1rem;
-    border-bottom: var(--blog-border-size) solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
     font-weight: normal;
     font-size: 2rem;
+    color: var(--color-md-title);
 }
 
 .article .article-metadata {
@@ -500,7 +501,7 @@ a.btn:active {
     align-items: center;
     margin-top: 1rem;
     font-size: 0.875rem;
-    color: var(--color-text-secondary);
+    color: var(--color-md-metadata);
 }
 
 .article .article-metadata>* {
@@ -559,9 +560,7 @@ a.btn:active {
     justify-content: space-between;
     gap: 1rem;
     padding: 0.5rem 0.75rem;
-    background-color: var(--color-bg-white);
-    transition: all 0.2s ease;
-    border: var(--blog-border-size) solid var(--color-border);
+    border: 1px solid var(--color-border);
 }
 
 .article-attachment-item .article-attachment-name {
@@ -598,6 +597,7 @@ a.btn:active {
     text-align: center;
     font-weight: normal;
     font-size: 2rem;
+    color: var(--color-md-title);
 }
 
 /*******************************************************************************
@@ -614,16 +614,16 @@ a.btn:active {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--color-modal-overlay);
 }
 
 .modal-dialog {
     display: flex;
     flex-direction: column;
-    background-color: var(--color-bg-white);
+    background-color: var(--color-modal-bg);
     margin: 1.75rem auto;
-    max-width: var(--blog-modal-max-width);
-    width: var(--blog-modal-width);
+    max-width: var(--layout-modal-max-width);
+    width: var(--layout-modal-width);
 }
 
 .modal-header {
@@ -645,8 +645,8 @@ a.btn:active {
 
 .modal-main {
     padding: 1rem;
-    border-top: var(--blog-border-size) solid var(--blog-modal-color-border);
-    border-bottom: var(--blog-border-size) solid var(--blog-modal-color-border);
+    border-top: 1px solid var(--color-modal-border);
+    border-bottom: 1px solid var(--color-modal-border);
     color: var(--color-text);
 }
 
@@ -731,12 +731,6 @@ a.btn:active {
     padding: 0 0.375rem;
 }
 
-.permission-item {
-    border-radius: 4px;
-    padding: 0 0.25rem;
-    background-color: var(--color-highlight);
-}
-
 /*******************************************************************************
  * 消息提示框
  ******************************************************************************/
@@ -760,13 +754,13 @@ a.btn:active {
 }
 
 .tips-item {
-    color: var(--blog-tips-item-color);
-    background-color: var(--blog-tips-item-color-bg);
-    border: var(--blog-border-size) solid var(--blog-tips-item-color-border);
+    color: var(--color-tips-item-text);
+    background-color: var(--color-tips-item-bg);
+    border: 1px solid var(--color-tips-item-border);
     border-radius: 4px;
     padding: 0.5rem 1.25rem;
-    max-width: var(--blog-tips-item-max-width);
-    width: var(--blog-tips-item-width);
+    max-width: var(--layout-tips-item-max-width);
+    width: var(--layout-tips-item-width);
 }
 
 /*******************************************************************************
