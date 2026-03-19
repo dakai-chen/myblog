@@ -83,21 +83,21 @@
     color: var(--color-link);
 }
 
-.markdown h1 .anchor::before:hover,
-.markdown h2 .anchor::before:hover,
-.markdown h3 .anchor::before:hover,
-.markdown h4 .anchor::before:hover,
-.markdown h5 .anchor::before:hover,
-.markdown h6 .anchor::before:hover {
+.markdown h1 .anchor:hover::before,
+.markdown h2 .anchor:hover::before,
+.markdown h3 .anchor:hover::before,
+.markdown h4 .anchor:hover::before,
+.markdown h5 .anchor:hover::before,
+.markdown h6 .anchor:hover::before {
     color: var(--color-link-hover);
 }
 
-.markdown h1 .anchor::before:active,
-.markdown h2 .anchor::before:active,
-.markdown h3 .anchor::before:active,
-.markdown h4 .anchor::before:active,
-.markdown h5 .anchor::before:active,
-.markdown h6 .anchor::before:active {
+.markdown h1 .anchor:active::before,
+.markdown h2 .anchor:active::before,
+.markdown h3 .anchor:active::before,
+.markdown h4 .anchor:active::before,
+.markdown h5 .anchor:active::before,
+.markdown h6 .anchor:active::before {
     color: var(--color-link-active);
 }
 
