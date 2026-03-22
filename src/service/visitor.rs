@@ -1,8 +1,7 @@
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::bo::visitor::VisitorArticleAccessPermitBo;
 use crate::model::co::visitor::VisitorCo;
-use crate::storage::cache::Cache;
-use crate::storage::cache::storage::CacheSetMode;
+use crate::storage::cache::{Cache, CacheSetMode};
 
 pub async fn create() -> Result<String, AppError> {
     let data = VisitorCo {

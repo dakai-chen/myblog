@@ -1,4 +1,4 @@
-pub mod storage;
+pub mod backend;
 
 use std::borrow::Cow;
 use std::time::Duration;
@@ -6,7 +6,7 @@ use std::time::Duration;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
-use crate::storage::cache::storage::{CacheSetMode, CacheStorage};
+use crate::storage::cache::backend::CacheBackend;
 use crate::util::time::UnixTimestampSecs;
 
 #[derive(Debug)]
@@ -141,18 +141,18 @@ impl<T: CacheData> Cache<T> {
         }
     }
 
-    pub async fn get_in<S>(id: &str, storage: &S) -> anyhow::Result<Option<Self>>
+    pub async fn get_in<S>(id: &str, backend: &S) -> anyhow::Result<Option<Self>>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        storage.get(id).await
+        backend.get(id).await
     }
 
-    pub async fn get_ttl_in<S>(id: &str, storage: &S) -> anyhow::Result<Option<Duration>>
+    pub async fn get_ttl_in<S>(id: &str, backend: &S) -> anyhow::Result<Option<Duration>>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        let Some(expires_at) = Self::get_expires_at_in(id, storage).await? else {
+        let Some(expires_at) = Self::get_expires_at_in(id, backend).await? else {
             return Ok(None);
         };
         Ok(expires_at
@@ -161,28 +161,28 @@ impl<T: CacheData> Cache<T> {
             .map(|time| Duration::from_secs(time as u64)))
     }
 
-    pub async fn get_expires_at_in<S>(id: &str, storage: &S) -> anyhow::Result<Option<i64>>
+    pub async fn get_expires_at_in<S>(id: &str, backend: &S) -> anyhow::Result<Option<i64>>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        storage.get_expires_at::<T>(id).await
+        backend.get_expires_at::<T>(id).await
     }
 
-    pub async fn set_in<S>(&self, mode: CacheSetMode, storage: &S) -> anyhow::Result<bool>
+    pub async fn set_in<S>(&self, mode: CacheSetMode, backend: &S) -> anyhow::Result<bool>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        storage.set(self, mode).await
+        backend.set(self, mode).await
     }
 
-    pub async fn set_ttl_in<S>(id: &str, ttl: Duration, storage: &S) -> anyhow::Result<bool>
+    pub async fn set_ttl_in<S>(id: &str, ttl: Duration, backend: &S) -> anyhow::Result<bool>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
         Self::set_expires_at_in(
             id,
             UnixTimestampSecs::now().saturating_add(ttl).as_i64(),
-            storage,
+            backend,
         )
         .await
     }
@@ -190,72 +190,85 @@ impl<T: CacheData> Cache<T> {
     pub async fn set_expires_at_in<S>(
         id: &str,
         expires_at: i64,
-        storage: &S,
+        backend: &S,
     ) -> anyhow::Result<bool>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        storage.set_expires_at::<T>(id, expires_at).await
+        backend.set_expires_at::<T>(id, expires_at).await
     }
 
-    pub async fn exists_in<S>(id: &str, storage: &S) -> anyhow::Result<bool>
+    pub async fn exists_in<S>(id: &str, backend: &S) -> anyhow::Result<bool>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        storage.exists::<T>(id).await
+        backend.exists::<T>(id).await
     }
 
-    pub async fn remove_in<S>(id: &str, storage: &S) -> anyhow::Result<()>
+    pub async fn remove_in<S>(id: &str, backend: &S) -> anyhow::Result<()>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        storage.remove::<T>(id).await
+        backend.remove::<T>(id).await
     }
 
-    pub async fn batch_remove_in<S>(id_prefix: &str, storage: &S) -> anyhow::Result<()>
+    pub async fn batch_remove_in<S>(id_prefix: &str, backend: &S) -> anyhow::Result<()>
     where
-        S: CacheStorage,
+        S: CacheBackend,
     {
-        storage.batch_remove::<T>(id_prefix).await
+        backend.batch_remove::<T>(id_prefix).await
     }
 
     pub async fn get(id: &str) -> anyhow::Result<Option<Self>> {
-        Self::get_in(id, storage::get()).await
+        Self::get_in(id, backend::get()).await
     }
 
     pub async fn get_ttl(id: &str) -> anyhow::Result<Option<Duration>> {
-        Self::get_ttl_in(id, storage::get()).await
+        Self::get_ttl_in(id, backend::get()).await
     }
 
     pub async fn get_expires_at(id: &str) -> anyhow::Result<Option<i64>> {
-        Self::get_expires_at_in(id, storage::get()).await
+        Self::get_expires_at_in(id, backend::get()).await
     }
 
     pub async fn set(&self, mode: CacheSetMode) -> anyhow::Result<bool> {
-        Self::set_in(self, mode, storage::get()).await
+        Self::set_in(self, mode, backend::get()).await
     }
 
     pub async fn set_ttl(id: &str, ttl: Duration) -> anyhow::Result<bool> {
-        Self::set_ttl_in(id, ttl, storage::get()).await
+        Self::set_ttl_in(id, ttl, backend::get()).await
     }
 
     pub async fn set_expires_at(id: &str, expires_at: i64) -> anyhow::Result<bool> {
-        Self::set_expires_at_in(id, expires_at, storage::get()).await
+        Self::set_expires_at_in(id, expires_at, backend::get()).await
     }
 
     pub async fn exists(id: &str) -> anyhow::Result<bool> {
-        Self::exists_in(id, storage::get()).await
+        Self::exists_in(id, backend::get()).await
     }
 
     pub async fn remove(id: &str) -> anyhow::Result<()> {
-        Self::remove_in(id, storage::get()).await
+        Self::remove_in(id, backend::get()).await
     }
 
     pub async fn batch_remove(id_prefix: &str) -> anyhow::Result<()> {
-        Self::batch_remove_in(id_prefix, storage::get()).await
+        Self::batch_remove_in(id_prefix, backend::get()).await
     }
 
     pub fn is_expired(&self) -> bool {
         UnixTimestampSecs::now().as_i64() > self.expires_at
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum CacheSetMode {
+    /// 无条件覆盖写入
+    /// 无论缓存中是否已存在该缓存类型的 ID ，直接写入/更新缓存，并设置过期时间
+    Overwrite,
+    /// 仅当缓存中不存在该缓存类型的 ID 时才写入（不存在则新增，存在则忽略）
+    /// 用于避免并发场景下的重复写入
+    OnlyIfNotExists,
+    /// 仅当缓存中已存在该缓存类型的 ID 时才更新（存在则覆盖，不存在则忽略）
+    /// 用于仅更新已有的缓存数据，避免新增无效缓存
+    OnlyIfExists,
 }

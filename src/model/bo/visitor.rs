@@ -11,8 +11,7 @@ use crate::context::visitor::VisitorId;
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::co::article::{VisitorArticleAccessPermitCo, VisitorArticleAccessPermitCoIdGen};
 use crate::model::co::visitor::VisitorCo;
-use crate::storage::cache::storage::CacheSetMode;
-use crate::storage::cache::{Cache, CacheIdGenerator};
+use crate::storage::cache::{Cache, CacheIdGenerator, CacheSetMode};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct VisitorBo {

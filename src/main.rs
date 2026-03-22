@@ -57,7 +57,7 @@ async fn main() -> anyhow::Result<()> {
         crate::storage::db::init_database_schema(&mut db).await?;
     }
 
-    crate::storage::cache::storage::init(state.db.clone())?;
+    crate::storage::cache::backend::init(state.db.clone())?;
 
     cron::init(state.clone()).await?;
     cron::start().await?;

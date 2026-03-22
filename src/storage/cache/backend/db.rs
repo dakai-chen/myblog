@@ -1,27 +1,27 @@
 use std::sync::OnceLock;
 
 use crate::model::po::cache::CachePo;
-use crate::storage::cache::storage::{CacheSetMode, CacheStorage};
-use crate::storage::cache::{Cache, CacheData};
+use crate::storage::cache::backend::CacheBackend;
+use crate::storage::cache::{Cache, CacheData, CacheSetMode};
 use crate::storage::db::DbPool;
 
-static STORAGE: OnceLock<DbCacheStorage> = OnceLock::new();
+static BACKEND: OnceLock<DbCacheBackend> = OnceLock::new();
 
 pub fn init(db: DbPool) -> anyhow::Result<()> {
-    STORAGE
-        .set(DbCacheStorage { db })
+    BACKEND
+        .set(DbCacheBackend { db })
         .map_err(|_| anyhow::anyhow!("重复初始化数据库缓存存储器"))
 }
 
-pub fn get() -> &'static DbCacheStorage {
-    STORAGE.get().expect("数据库缓存存储器未初始化")
+pub fn get() -> &'static DbCacheBackend {
+    BACKEND.get().expect("数据库缓存存储器未初始化")
 }
 
-pub struct DbCacheStorage {
+pub struct DbCacheBackend {
     db: DbPool,
 }
 
-impl CacheStorage for DbCacheStorage {
+impl CacheBackend for DbCacheBackend {
     async fn get<T>(&self, id: &str) -> anyhow::Result<Option<Cache<T>>>
     where
         T: CacheData,
