@@ -5,7 +5,7 @@ use boluo::BoxError;
 use boluo::body::Bytes;
 use futures_util::Stream;
 
-use crate::model::common::resource::ResourcePath;
+use crate::model::common::resource::{ResourceKind, ResourcePath};
 use crate::model::po::resource::ResourcePo;
 
 /// 上传资源文件自定义选项
@@ -13,8 +13,8 @@ use crate::model::po::resource::ResourcePo;
 pub struct UploadResourceOptionsBo {
     /// 资源ID
     pub resource_id: String,
-    /// 是否公开访问
-    pub is_public: bool,
+    /// 资源类型
+    pub resource_kind: ResourceKind,
 }
 
 /// 上传资源文件元数据
@@ -53,8 +53,8 @@ pub struct ResourceBo {
     pub size: u64,
     /// 文件类型
     pub mime_type: String,
-    /// 是否公开访问
-    pub is_public: bool,
+    /// 资源类型
+    pub kind: ResourceKind,
     /// 文件哈希
     pub sha256: String,
     /// 创建时间
@@ -70,7 +70,7 @@ impl From<ResourcePo> for ResourceBo {
             path: value.path,
             size: value.size,
             mime_type: value.mime_type,
-            is_public: value.is_public,
+            kind: value.kind,
             sha256: value.sha256,
             created_at: value.created_at,
         }

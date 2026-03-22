@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS resource (
     path        TEXT    NOT NULL,
     size        INTEGER NOT NULL,
     mime_type   TEXT    NOT NULL,
-    is_public   INTEGER NOT NULL,
+    kind        TEXT    NOT NULL,
     sha256      TEXT    NOT NULL,
     created_at  INTEGER NOT NULL
 );

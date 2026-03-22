@@ -17,7 +17,7 @@ pub async fn create(resource: &ResourcePo, db: &mut DbConn) -> anyhow::Result<()
             `path`,
             `size`,
             `mime_type`,
-            `is_public`,
+            `kind`,
             `sha256`,
             `created_at`
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -29,7 +29,7 @@ pub async fn create(resource: &ResourcePo, db: &mut DbConn) -> anyhow::Result<()
     .bind(&resource.path)
     .bind(&i64::try_from(resource.size)?)
     .bind(&resource.mime_type)
-    .bind(&resource.is_public)
+    .bind(&resource.kind)
     .bind(&resource.sha256)
     .bind(&resource.created_at)
     .execute(db)
@@ -47,7 +47,7 @@ pub async fn update(resource: &ResourcePo, db: &mut DbConn) -> anyhow::Result<u6
             `path` = ?,
             `size` = ?,
             `mime_type` = ?,
-            `is_public` = ?,
+            `kind` = ?,
             `sha256` = ?,
             `created_at` = ?
         WHERE
@@ -59,7 +59,7 @@ pub async fn update(resource: &ResourcePo, db: &mut DbConn) -> anyhow::Result<u6
     .bind(&resource.path)
     .bind(&i64::try_from(resource.size)?)
     .bind(&resource.mime_type)
-    .bind(&resource.is_public)
+    .bind(&resource.kind)
     .bind(&resource.sha256)
     .bind(&resource.created_at)
     .bind(&resource.id)

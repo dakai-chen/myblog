@@ -17,6 +17,7 @@ use crate::model::bo::resource::{RemoveResourceBo, UploadResourceOptionsBo};
 use crate::model::bo::visitor::VisitorBo;
 use crate::model::co::article::{VisitorArticleAccessRecordCo, VisitorArticleAccessRecordCoIdGen};
 use crate::model::common::article::{ArticleStatus, SearchArticleSort};
+use crate::model::common::resource::ResourceKind;
 use crate::model::po::article::{ArticlePo, SearchArticle};
 use crate::model::po::article_attachment::ArticleAttachmentPo;
 use crate::model::po::article_stats::ArticleStatsPo;
@@ -293,10 +294,10 @@ pub async fn upload_attachment(
 
         let options = UploadResourceOptionsBo {
             resource_id: attachment.resource_id.clone(),
-            is_public: false,
+            resource_kind: ResourceKind::Attachment,
         };
         let resource =
-            crate::service::resource::upload_resource_with_options(bo.attachment, options, tx)
+            crate::service::resource::save_resource_with_options(bo.attachment, options, tx)
                 .await?;
 
         Ok(ArticleAttachmentBo::from_entities(attachment, resource))

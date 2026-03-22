@@ -1,4 +1,4 @@
-use crate::model::common::resource::ResourcePath;
+use crate::model::common::resource::{ResourceKind, ResourcePath};
 
 /// 资源文件
 #[derive(Debug, Clone, sqlx::FromRow)]
@@ -15,8 +15,8 @@ pub struct ResourcePo {
     pub size: u64,
     /// 文件类型
     pub mime_type: String,
-    /// 是否公开访问
-    pub is_public: bool,
+    /// 资源类型
+    pub kind: ResourceKind,
     /// 文件哈希
     pub sha256: String,
     /// 创建时间

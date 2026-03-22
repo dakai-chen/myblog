@@ -1,5 +1,6 @@
 use std::sync::LazyLock;
 
+use serde::{Deserialize, Serialize};
 use sqlx::Database;
 use sqlx::encode::IsNull;
 use sqlx::error::BoxDynError;
@@ -91,4 +92,14 @@ impl sqlx::Decode<'_, Db> for ResourcePath {
     fn decode(value: <Db as Database>::ValueRef<'_>) -> Result<Self, BoxDynError> {
         <String as sqlx::Decode<Db>>::decode(value).map(|path| ResourcePath::from_relative(&path))
     }
+}
+
+/// 资源类型
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Serialize, sqlx::Type)]
+#[sqlx(rename_all = "snake_case")]
+pub enum ResourceKind {
+    /// 公开资源
+    Public,
+    /// 附件资源
+    Attachment,
 }

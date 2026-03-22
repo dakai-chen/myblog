@@ -13,7 +13,7 @@ use crate::model::bo::resource::{
     FindResourceBo, RemoveResourceBo, ResourceBo, UploadResourceBo, UploadResourceMetaBo,
     UploadResourceOptionsBo,
 };
-use crate::model::common::resource::ResourcePath;
+use crate::model::common::resource::{ResourceKind, ResourcePath};
 use crate::model::po::resource::ResourcePo;
 use crate::storage::db::DbConn;
 use crate::util::path::PathJoin;
@@ -57,8 +57,8 @@ pub async fn find_resource(
     Ok(Some(resource))
 }
 
-/// 基于自定义选项上传资源文件
-pub async fn upload_resource_with_options(
+/// 保存资源文件并附带选项
+pub async fn save_resource_with_options(
     upload: UploadResourceBo,
     options: UploadResourceOptionsBo,
     db: &mut DbConn,
@@ -99,7 +99,7 @@ pub async fn upload_resource_with_options(
         path,
         size: upload.meta.size,
         mime_type: upload.meta.mime_type,
-        is_public: options.is_public,
+        kind: options.resource_kind,
         sha256: upload.meta.sha256,
         created_at: UnixTimestampSecs::now().as_i64(),
     };
@@ -112,16 +112,13 @@ pub async fn upload_resource_with_options(
     Ok(ResourceBo::from(resource))
 }
 
-/// 上传资源文件
-pub async fn upload_resource(
-    bo: UploadResourceBo,
-    db: &mut DbConn,
-) -> Result<ResourceBo, AppError> {
+/// 保存资源文件
+pub async fn save_resource(bo: UploadResourceBo, db: &mut DbConn) -> Result<ResourceBo, AppError> {
     let options = UploadResourceOptionsBo {
         resource_id: crate::util::uuid::v4(),
-        is_public: true,
+        resource_kind: ResourceKind::Public,
     };
-    upload_resource_with_options(bo, options, db).await
+    save_resource_with_options(bo, options, db).await
 }
 
 /// 将数据存储到临时文件并计算其 SHA256 值，并校验与用户提供的哈希是否一致

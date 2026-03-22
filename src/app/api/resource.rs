@@ -8,6 +8,7 @@ use boluo::static_file::ServeFile;
 use crate::context::auth::Admin;
 use crate::context::db::DbPoolConnection;
 use crate::error::AppErrorMeta;
+use crate::model::common::resource::ResourceKind;
 use crate::model::dto::api::resource::{
     DownloadResourceDto, RemoveResourceDto, ResourceDto, UploadResourceDto,
 };
@@ -20,7 +21,7 @@ pub async fn upload_resource(
     DbPoolConnection(mut db): DbPoolConnection,
 ) -> Result<impl IntoResponse, BoxError> {
     params.validate(&())?;
-    let resource = crate::service::resource::upload_resource(params.into(), &mut db).await?;
+    let resource = crate::service::resource::save_resource(params.into(), &mut db).await?;
     Ok(crate::response::ok(ResourceDto::from(resource)))
 }
 
@@ -35,7 +36,7 @@ pub async fn download_resource(
     else {
         return Err(AppErrorMeta::NotFound.into_error().into());
     };
-    if !resource.is_public {
+    if resource.kind != ResourceKind::Public {
         return Err(AppErrorMeta::NotFound.into_error().into());
     }
     let response = ServeFile::new(resource.path.absolute())
