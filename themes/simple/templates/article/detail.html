@@ -77,11 +77,11 @@
                 <div class="article-attachment-exts">
                     <div class="article-attachment-size">{{ attachment.size | human_size }}</div>
                     <a class="article-attachment-download-btn" download="{{ attachment.name }}"
-                        href="/articles/{{ attachment.article_id }}/attachments/{{ attachment.attachment_id }}">下载</a>
+                        href="/attachments/{{ attachment.attachment_id }}">下载</a>
                     {% if admin %}
                     <a class="article-attachment-download-btn modal-open" href="javascript:void(0)"
                         data-modal-target=".cid-modal-delete-attachment"
-                        data-modal-value='{"article_id": "{{ attachment.article_id }}","attachment_id": "{{ attachment.attachment_id }}"}'>删除</a>
+                        data-modal-value="{{ attachment.attachment_id }}">删除</a>
                     {% endif %}
                 </div>
             </li>
@@ -110,8 +110,8 @@
     });
 
     modal_register(".cid-modal-delete-attachment", {
-        on_confirm: (_, data) => {
-            api_delete_attachment(data, () => { window.location.reload() });
+        on_confirm: (_, id) => {
+            api_delete_attachment(`${id}`, () => { window.location.reload() });
         }
     });
 

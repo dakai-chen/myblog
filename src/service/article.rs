@@ -322,9 +322,6 @@ pub async fn remove_attachment(
         else {
             return Ok(());
         };
-        if attachment.article_id != bo.article_id {
-            return Err(AppErrorMeta::BadRequest.with_message("附件不属于指定文章"));
-        }
         crate::storage::db::article_attachment::remove(&attachment.id, tx).await?;
         let remove_resource = RemoveResourceBo {
             resource_id: attachment.resource_id.as_str().into(),
@@ -347,11 +344,8 @@ pub async fn download_attachment(
     else {
         return Ok(None);
     };
-    if attachment.article_id != bo.article_id {
-        return Ok(None);
-    }
 
-    let Some(article) = crate::storage::db::article::find(&bo.article_id, db).await? else {
+    let Some(article) = crate::storage::db::article::find(&attachment.article_id, db).await? else {
         return Err(AppErrorMeta::Internal
             .with_message("附件关联的文章不存在")
             .with_context(format!(

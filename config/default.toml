@@ -40,7 +40,7 @@ default_limit = "2MiB"
 ### 自定义请求体大小限制规则列表
 rules = [
     { path = "/api/resource/upload", method = "POST", limit = "100MiB" },
-    { path = "/api/article/upload_attachment", method = "POST", limit = "500MiB" },
+    { path = "/api/attachment/upload", method = "POST", limit = "500MiB" },
 ]
 
 ### ----------------------------------------------------------------------------

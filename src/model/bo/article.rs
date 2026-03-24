@@ -324,8 +324,6 @@ pub struct UploadArticleAttachmentBo<'a> {
 /// 删除文章附件
 #[derive(Debug, Clone)]
 pub struct RemoveArticleAttachmentBo<'a> {
-    /// 文章ID
-    pub article_id: Cow<'a, str>,
     /// 附件ID
     pub attachment_id: Cow<'a, str>,
 }
@@ -333,8 +331,6 @@ pub struct RemoveArticleAttachmentBo<'a> {
 /// 下载文章附件
 #[derive(Debug, Clone)]
 pub struct DownloadArticleAttachmentBo<'a> {
-    /// 文章ID
-    pub article_id: Cow<'a, str>,
     /// 附件ID
     pub attachment_id: Cow<'a, str>,
 }

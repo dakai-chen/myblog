@@ -17,7 +17,7 @@ use crate::model::dto::api::article::{
 use crate::validator::Validation;
 
 #[boluo::route("/article/unlock", method = "POST")]
-pub async fn unlock_article(
+pub async fn unlock(
     visitor: VisitorBo,
     Json(params): Json<UnlockArticleDto>,
     DbPoolConnection(mut db): DbPoolConnection,
@@ -28,7 +28,7 @@ pub async fn unlock_article(
 }
 
 #[boluo::route("/article/create", method = "POST")]
-pub async fn create_article(
+pub async fn create(
     _: Admin,
     Json(params): Json<CreateArticleDto>,
     DbPoolConnection(mut db): DbPoolConnection,
@@ -41,7 +41,7 @@ pub async fn create_article(
 }
 
 #[boluo::route("/article/update", method = "POST")]
-pub async fn update_article(
+pub async fn update(
     _: Admin,
     Json(params): Json<UpdateArticleDto>,
     DbPoolConnection(mut db): DbPoolConnection,
@@ -52,7 +52,7 @@ pub async fn update_article(
 }
 
 #[boluo::route("/article/remove", method = "POST")]
-pub async fn remove_article(
+pub async fn remove(
     _: Admin,
     Json(params): Json<RemoveArticleDto>,
     DbPoolConnection(mut db): DbPoolConnection,
@@ -63,7 +63,7 @@ pub async fn remove_article(
 }
 
 #[boluo::route("/article/search", method = "POST")]
-pub async fn search_article(
+pub async fn search(
     admin: Option<Admin>,
     Json(params): Json<SearchArticleDto>,
     DbPoolConnection(mut db): DbPoolConnection,
@@ -74,8 +74,8 @@ pub async fn search_article(
     Ok(crate::response::ok(ArticleListDto::from(list)))
 }
 
-#[boluo::route("/article/get", method = "POST")]
-pub async fn get_article(
+#[boluo::route("/article/detail", method = "POST")]
+pub async fn detail(
     admin: Option<Admin>,
     visitor: VisitorBo,
     Json(params): Json<GetArticleDto>,
@@ -91,7 +91,7 @@ pub async fn get_article(
     Ok(crate::response::ok(ArticleDetailsDto::from(details)))
 }
 
-#[boluo::route("/article/upload_attachment", method = "POST")]
+#[boluo::route("/attachment/upload", method = "POST")]
 pub async fn upload_attachment(
     _: Admin,
     params: UploadArticleAttachmentDto,
@@ -102,7 +102,7 @@ pub async fn upload_attachment(
     Ok(crate::response::ok(ArticleAttachmentDto::from(attachment)))
 }
 
-#[boluo::route("/article/remove_attachment", method = "POST")]
+#[boluo::route("/attachment/remove", method = "POST")]
 pub async fn remove_attachment(
     _: Admin,
     Json(params): Json<RemoveArticleAttachmentDto>,
@@ -113,7 +113,7 @@ pub async fn remove_attachment(
     Ok(crate::response::ok(()))
 }
 
-#[boluo::route("/articles/{article_id}/attachments/{attachment_id}", method = "GET")]
+#[boluo::route("/attachments/{attachment_id}", method = "GET")]
 pub async fn download_attachment(
     admin: Option<Admin>,
     visitor: VisitorBo,

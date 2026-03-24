@@ -432,8 +432,6 @@ impl<'a> Into<UploadArticleAttachmentBo<'a>> for UploadArticleAttachmentDto {
 /// 删除文章附件
 #[derive(Debug, Clone, Deserialize)]
 pub struct RemoveArticleAttachmentDto {
-    /// 文章ID
-    pub article_id: String,
     /// 附件ID
     pub attachment_id: String,
 }
@@ -441,7 +439,6 @@ pub struct RemoveArticleAttachmentDto {
 impl<'a> Into<RemoveArticleAttachmentBo<'a>> for RemoveArticleAttachmentDto {
     fn into(self) -> RemoveArticleAttachmentBo<'a> {
         RemoveArticleAttachmentBo {
-            article_id: self.article_id.into(),
             attachment_id: self.attachment_id.into(),
         }
     }
@@ -450,8 +447,6 @@ impl<'a> Into<RemoveArticleAttachmentBo<'a>> for RemoveArticleAttachmentDto {
 /// 下载文章附件
 #[derive(Debug, Clone, Deserialize)]
 pub struct DownloadArticleAttachmentDto {
-    /// 文章ID
-    pub article_id: String,
     /// 附件ID
     pub attachment_id: String,
 }
@@ -459,7 +454,6 @@ pub struct DownloadArticleAttachmentDto {
 impl<'a> Into<DownloadArticleAttachmentBo<'a>> for DownloadArticleAttachmentDto {
     fn into(self) -> DownloadArticleAttachmentBo<'a> {
         DownloadArticleAttachmentBo {
-            article_id: self.article_id.into(),
             attachment_id: self.attachment_id.into(),
         }
     }

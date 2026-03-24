@@ -81,9 +81,6 @@ impl Validation<()> for UploadArticleAttachmentDto {
 
 impl Validation<()> for RemoveArticleAttachmentDto {
     fn validate(&self, _context: &()) -> Result<(), ValidationError> {
-        if self.article_id.is_empty() {
-            return Err(ValidationError::validation("文章ID不能为空"));
-        }
         if self.attachment_id.is_empty() {
             return Err(ValidationError::validation("附件ID不能为空"));
         }
@@ -93,9 +90,6 @@ impl Validation<()> for RemoveArticleAttachmentDto {
 
 impl Validation<()> for DownloadArticleAttachmentDto {
     fn validate(&self, _context: &()) -> Result<(), ValidationError> {
-        if self.article_id.is_empty() {
-            return Err(ValidationError::validation("文章ID不能为空"));
-        }
         if self.attachment_id.is_empty() {
             return Err(ValidationError::validation("附件ID不能为空"));
         }

@@ -1,10 +1,10 @@
-function api_delete_article(id, callback) {
+function api_delete_article(article_id, callback) {
     let params = {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "article_id": id }),
+        body: JSON.stringify({ "article_id": article_id }),
     };
     fetch(`/api/article/remove`, params)
         .then((response) => {
@@ -15,15 +15,15 @@ function api_delete_article(id, callback) {
         });
 }
 
-function api_delete_attachment(data, callback) {
+function api_delete_attachment(attachment_id, callback) {
     let params = {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: data,
+        body: JSON.stringify({ "attachment_id": attachment_id }),
     };
-    fetch(`/api/article/remove_attachment`, params)
+    fetch(`/api/attachment/remove`, params)
         .then((response) => {
             fetch_alert_error(response) && callback(response);
         })
@@ -65,7 +65,7 @@ async function api_upload_attachment(article_id, name, file, callback) {
     const file_sha256 = await sha256(file);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/article/upload_attachment');
+    xhr.open('POST', '/api/attachment/upload');
 
     xhr.setRequestHeader('x-article-id', article_id);
     xhr.setRequestHeader('x-file-size', file.size.toString());

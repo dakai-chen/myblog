@@ -15,7 +15,7 @@ use crate::model::dto::api::resource::{
 use crate::validator::Validation;
 
 #[boluo::route("/resource/upload", method = "POST")]
-pub async fn upload_resource(
+pub async fn upload(
     _: Admin,
     params: UploadResourceDto,
     DbPoolConnection(mut db): DbPoolConnection,
@@ -25,8 +25,19 @@ pub async fn upload_resource(
     Ok(crate::response::ok(ResourceDto::from(resource)))
 }
 
+#[boluo::route("/resource/remove", method = "POST")]
+pub async fn remove(
+    _: Admin,
+    Json(params): Json<RemoveResourceDto>,
+    DbPoolConnection(mut db): DbPoolConnection,
+) -> Result<impl IntoResponse, BoxError> {
+    params.validate(&())?;
+    crate::service::resource::remove_resource(&params.into(), &mut db).await?;
+    Ok(crate::response::ok(()))
+}
+
 #[boluo::route("/resources/{resource_id}", method = "GET")]
-pub async fn download_resource(
+pub async fn download(
     Path(params): Path<DownloadResourceDto>,
     DbPoolConnection(mut db): DbPoolConnection,
     request: Request,
@@ -51,15 +62,4 @@ pub async fn download_resource(
         ),
     ];
     (response_headers, response).into_response()
-}
-
-#[boluo::route("/resource/remove", method = "POST")]
-pub async fn remove_resource(
-    _: Admin,
-    Json(params): Json<RemoveResourceDto>,
-    DbPoolConnection(mut db): DbPoolConnection,
-) -> Result<impl IntoResponse, BoxError> {
-    params.validate(&())?;
-    crate::service::resource::remove_resource(&params.into(), &mut db).await?;
-    Ok(crate::response::ok(()))
 }

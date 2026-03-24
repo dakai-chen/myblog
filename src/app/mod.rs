@@ -53,7 +53,7 @@ fn build_static_file() -> Router {
 
 fn build_download() -> Router {
     Router::new()
-        .mount(api::resource::download_resource)
+        .mount(api::resource::download)
         .mount(api::article::download_attachment)
 }
 
@@ -87,15 +87,15 @@ fn build_api() -> Router {
         // 认证模块路由
         .mount(api::auth::login)
         // 资源模块路由
-        .mount(api::resource::upload_resource)
-        .mount(api::resource::remove_resource)
+        .mount(api::resource::upload)
+        .mount(api::resource::remove)
         // 文章模块路由
-        .mount(api::article::create_article)
-        .mount(api::article::update_article)
-        .mount(api::article::remove_article)
-        .mount(api::article::unlock_article)
-        .mount(api::article::search_article)
-        .mount(api::article::get_article)
+        .mount(api::article::create)
+        .mount(api::article::update)
+        .mount(api::article::remove)
+        .mount(api::article::unlock)
+        .mount(api::article::search)
+        .mount(api::article::detail)
         .mount(api::article::upload_attachment)
         .mount(api::article::remove_attachment)
 }
