@@ -522,19 +522,7 @@ a.btn:active {
     vertical-align: middle;
 }
 
-.article .article-tags {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    margin-top: 0.5rem;
-}
-
-.article .article-tags > * {
-    padding: 0 0.375rem;
-}
-
-.article .article-main {
+.article .article-content {
     word-break: break-all;
 }
 
@@ -542,13 +530,13 @@ a.btn:active {
  * 文章附件
  ******************************************************************************/
 
-.article-attachment {
+.attachment-container {
     display: flex;
     flex-direction: column;
     margin-top: 1.5rem;
 }
 
-.article-attachment-list {
+.attachment-list {
     display: flex;
     flex-direction: column;
     margin-top: 1.5rem;
@@ -557,7 +545,7 @@ a.btn:active {
     font-size: 0.875rem;
 }
 
-.article-attachment-list .article-attachment-item {
+.attachment-item {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
@@ -566,22 +554,22 @@ a.btn:active {
     border: 1px solid var(--color-border);
 }
 
-.article-attachment-item .article-attachment-name {
+.attachment-name {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.article-attachment-item .article-attachment-exts {
+.attachment-exts {
     display: flex;
     gap: 0.75rem;
 }
 
-.article-attachment-exts .article-attachment-size {
+.attachment-size {
     white-space: nowrap;
 }
 
-.article-attachment-exts .article-attachment-download-btn {
+.attachment-download-btn {
     white-space: nowrap;
 }
 

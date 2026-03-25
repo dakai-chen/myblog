@@ -16,26 +16,26 @@
 {% block main %}
 <!-- 文章 -->
 <article class="article">
-    <div class="article-main markdown">
+    <div class="article-content markdown">
         {{ context.render_content | safe }}
     </div>
     <!-- 附件 -->
     {% if context.attachments %}
-    <div class="article-attachment">
+    <div class="attachment-container">
         <div class="divider-container">
             <div class="divider-line"></div>
             <span class="divider-text">附件</span>
             <div class="divider-line"></div>
         </div>
-        <div class="article-attachment-list">
+        <div class="attachment-list">
             {% for attachment in context.attachments %}
-            <div class="article-attachment-item">
-                <div class="article-attachment-name">{{ attachment.name }}</div>
-                <div class="article-attachment-exts">
-                    <div class="article-attachment-size">{{ attachment.size | human_size }}</div>
+            <div class="attachment-item">
+                <div class="attachment-name">{{ attachment.name }}</div>
+                <div class="attachment-exts">
+                    <div class="attachment-size">{{ attachment.size | human_size }}</div>
                     <div>
                         <span>|</span>
-                        <a class="article-attachment-download-btn" download="{{ attachment.name }}"
+                        <a class="attachment-download-btn" download="{{ attachment.name }}"
                             href="/attachments/{{ attachment.attachment_id }}">下载</a>
                     </div>
                 </div>

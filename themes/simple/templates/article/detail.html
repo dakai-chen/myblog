@@ -59,27 +59,27 @@
         </div>
     </div>
     <!-- 正文 -->
-    <div class="article-main markdown">
+    <div class="article-content markdown">
         {{ context.render_content | safe }}
     </div>
     <!-- 附件 -->
     {% if context.attachments %}
-    <div class="article-attachment">
+    <div class="attachment-container">
         <div class="divider-container">
             <div class="divider-line"></div>
             <span class="divider-text">附件</span>
             <div class="divider-line"></div>
         </div>
-        <ul class="article-attachment-list">
+        <ul class="attachment-list">
             {% for attachment in context.attachments %}
-            <li class="article-attachment-item">
-                <div class="article-attachment-name" title="{{ attachment.name }}">{{ attachment.name }}</div>
-                <div class="article-attachment-exts">
-                    <div class="article-attachment-size">{{ attachment.size | human_size }}</div>
-                    <a class="article-attachment-download-btn" download="{{ attachment.name }}"
+            <li class="attachment-item">
+                <div class="attachment-name" title="{{ attachment.name }}">{{ attachment.name }}</div>
+                <div class="attachment-exts">
+                    <div class="attachment-size">{{ attachment.size | human_size }}</div>
+                    <a class="attachment-download-btn" download="{{ attachment.name }}"
                         href="/attachments/{{ attachment.attachment_id }}">下载</a>
                     {% if admin %}
-                    <a class="article-attachment-download-btn modal-open" href="javascript:void(0)"
+                    <a class="attachment-download-btn modal-open" href="javascript:void(0)"
                         data-modal-target=".cid-modal-delete-attachment"
                         data-modal-value="{{ attachment.attachment_id }}">删除</a>
                     {% endif %}
