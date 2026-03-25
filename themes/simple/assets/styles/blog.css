@@ -796,13 +796,20 @@ a.btn:active {
     gap: 1rem;
 }
 
-.divider-line {
+.divider-line-l {
+    width: 2rem;
+    height: 1px;
+    border-top: 1px solid var(--color-divider-line-border);
+}
+
+.divider-line-r {
     flex: 1;
     height: 1px;
-    background-color: var(--color-border);
+    border-top: 1px solid var(--color-divider-line-border);
 }
 
 .divider-text {
     white-space: nowrap;
     font-size: 1rem;
+    color: var(--color-divider-line-text);
 }

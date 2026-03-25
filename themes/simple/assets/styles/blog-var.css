@@ -211,6 +211,13 @@
 
     --layout-tips-item-width: 90%;
     --layout-tips-item-max-width: calc(var(--layout-container-max-width) * 0.6);
+
+    /***************************************************************************
+        分区线
+    ***************************************************************************/
+
+    --color-divider-line-text: var(--color-text-secondary);
+    --color-divider-line-border: #e2e4e9;
 }
 
 /* 类名选择器用于动态覆盖变量 (对应原 .btn-danger, .tips-item-success 等) */
