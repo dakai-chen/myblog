@@ -37,7 +37,7 @@ pub fn render(markdown: &str) -> anyhow::Result<String> {
                     let id = context.anchorizer.anchorize(&text_content);
                     write!(
                         context,
-                        "<a href=\"#{}\" aria-hidden=\"true\" class=\"anchor\" id=\"{}{}\">",
+                        "<a href=\"#{}\" class=\"anchor\" id=\"{}{}\">",
                         id, prefix, id
                     )?;
                 }
