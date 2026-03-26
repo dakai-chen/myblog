@@ -2,7 +2,7 @@
     --color-body-bg: #f7f7f2;
 
     --color-text: #4b5362;
-    --color-text-secondary: #6b7280;
+    --color-text-secondary: var(--color-text);
 
     --color-bg: var(--color-body-bg);
 
