@@ -162,8 +162,8 @@
     --color-md-blockquote-border: rgb(9, 74, 206);
     --color-md-blockquote-bg: #f1f6f9;
 
-    --color-md-code-copy-hover-bg: #dcdcdc;
-    --color-md-code-copy-active-bg: #c9c9c9;
+    --color-md-code-copy-hover-bg: #ecf0f5;
+    --color-md-code-copy-active-bg: transparent;
 
     --color-md-checkbox-border: #9ca3af;
     --color-md-checkbox-bg: #f9fafb;
