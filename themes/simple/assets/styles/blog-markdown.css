@@ -330,7 +330,7 @@
 }
 
 /*******************************************************************************
- * 复选框 (Checkbox)
+ * 任务列表 (Checkbox)
  ******************************************************************************/
 
 .markdown li > input[type="checkbox"] {
@@ -339,7 +339,7 @@
     position: relative;
     width: 0.75rem;
     height: 0.75rem;
-    margin-right: 0.25rem;
+    margin-right: 0.5rem;
     margin-left: -1.25rem;
     border: 1px solid var(--color-md-checkbox-border);
     background: var(--color-md-checkbox-bg);
