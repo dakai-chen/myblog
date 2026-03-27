@@ -1,6 +1,6 @@
 <!-- 模态框 - 删除文章 -->
 {% macro delete_article(class) %}
-<div class="modal {{ class }}">
+<div class="modal {{ class }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>删除文章</span>
@@ -18,7 +18,7 @@
 
 <!-- 模态框 - 删除附件 -->
 {% macro delete_attachment(class) %}
-<div class="modal {{ class }}">
+<div class="modal {{ class }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>删除附件</span>
@@ -36,7 +36,7 @@
 
 <!-- 模态框 - 文件上传 -->
 {% macro upload_file(class) %}
-<div class="modal {{ class }}">
+<div class="modal {{ class }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>文件上传</span>
@@ -66,7 +66,7 @@
 
 <!-- 模态框 - 附件上传 -->
 {% macro upload_attachment(class) %}
-<div class="modal {{ class }}">
+<div class="modal {{ class }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-header">
             <span>附件上传</span>
