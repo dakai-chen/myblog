@@ -200,13 +200,7 @@ impl Serialize for ArticleAttachmentVo {
         state.serialize_field("mime_type", &self.mime_type)?;
         state.serialize_field("sha256", &self.sha256)?;
         state.serialize_field("created_at", &self.created_at)?;
-        state.serialize_field(
-            "url",
-            &format!(
-                "/articles/{}/attachments/{}",
-                self.article_id, self.attachment_id
-            ),
-        )?;
+        state.serialize_field("url", &format!("/attachments/{}", self.attachment_id))?;
 
         state.end()
     }

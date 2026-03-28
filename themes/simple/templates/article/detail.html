@@ -76,8 +76,7 @@
                 <div class="attachment-name" title="{{ attachment.name }}">{{ attachment.name }}</div>
                 <div class="attachment-exts">
                     <div class="attachment-size">{{ attachment.size | human_size }}</div>
-                    <a class="attachment-download-btn" download="{{ attachment.name }}"
-                        href="/attachments/{{ attachment.attachment_id }}">下载</a>
+                    <a class="attachment-download-btn" download="{{ attachment.name }}" href="{{ attachment.url }}">下载</a>
                     {% if admin %}
                     <a class="attachment-download-btn modal-open" href="javascript:void(0)"
                         data-modal-target=".cid-modal-delete-attachment"

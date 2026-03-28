@@ -35,8 +35,7 @@
                     <div class="attachment-size">{{ attachment.size | human_size }}</div>
                     <div>
                         <span>|</span>
-                        <a class="attachment-download-btn" download="{{ attachment.name }}"
-                            href="/attachments/{{ attachment.attachment_id }}">下载</a>
+                        <a class="attachment-download-btn" download="{{ attachment.name }}" href="{{ attachment.url }}">下载</a>
                     </div>
                 </div>
             </div>
