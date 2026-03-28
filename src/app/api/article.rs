@@ -10,7 +10,7 @@ use crate::context::db::DbPoolConnection;
 use crate::error::AppErrorMeta;
 use crate::model::bo::visitor::VisitorBo;
 use crate::model::dto::api::article::{
-    ArticleAttachmentDto, ArticleDetailsDto, ArticleListDto, CreateArticleDto,
+    ArticleAttachmentDto, ArticleDetailDto, ArticleListDto, CreateArticleDto,
     DownloadArticleAttachmentDto, GetArticleDto, RemoveArticleAttachmentDto, RemoveArticleDto,
     SearchArticleDto, UnlockArticleDto, UpdateArticleDto, UploadArticleAttachmentDto,
 };
@@ -82,13 +82,13 @@ pub async fn detail(
     DbPoolConnection(mut db): DbPoolConnection,
 ) -> Result<impl IntoResponse, BoxError> {
     params.validate(&())?;
-    let Some(details) =
+    let Some(detail) =
         crate::service::article::get_article(admin.as_deref(), &visitor, &params.into(), &mut db)
             .await?
     else {
         return Err(AppErrorMeta::NotFound.with_message("文章不存在").into());
     };
-    Ok(crate::response::ok(ArticleDetailsDto::from(details)))
+    Ok(crate::response::ok(ArticleDetailDto::from(detail)))
 }
 
 #[boluo::route("/attachment/upload", method = "POST")]

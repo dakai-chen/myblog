@@ -13,9 +13,7 @@ use crate::model::dto::web::article::{
     CreateArticleSubmitDto, GetArticleDto, SearchArticleDto, UnlockArticleDto, UpdateArticleDto,
     UpdateArticleSubmitDto,
 };
-use crate::model::vo::article::{
-    ArticleDetailsVo, ArticleListVo, CreateArticleVo, UpdateArticleVo,
-};
+use crate::model::vo::article::{ArticleDetailVo, ArticleListVo, CreateArticleVo, UpdateArticleVo};
 use crate::state::AppState;
 use crate::template::render::PageContext;
 use crate::validator::Validation;
@@ -51,7 +49,7 @@ pub async fn detail(
     else {
         return Err(AppErrorMeta::NotFound.with_message("文章不存在").into());
     };
-    let vo = ArticleDetailsVo::from(article);
+    let vo = ArticleDetailVo::from(article);
     let context = PageContext::new(vo).admin(admin.map(Into::into));
     Ok(Html(state.template.typed_render(&context)))
 }

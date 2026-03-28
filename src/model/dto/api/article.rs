@@ -7,10 +7,10 @@ use serde::{Deserialize, Serialize, Serializer};
 
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::bo::article::{
-    AdminArticleDetailsBo, ArticleAttachmentBo, ArticleDetailsBo, ArticleListBo, ArticleListItemBo,
+    AdminArticleDetailBo, ArticleAttachmentBo, ArticleDetailBo, ArticleListBo, ArticleListItemBo,
     CreateArticleBo, DownloadArticleAttachmentBo, GetArticleBo, RemoveArticleAttachmentBo,
     RemoveArticleBo, SearchArticleBo, UnlockArticleBo, UpdateArticleBo, UploadArticleAttachmentBo,
-    VisitorArticleDetailsBo,
+    VisitorArticleDetailBo,
 };
 use crate::model::common::article::ArticleStatus;
 use crate::model::dto::api::resource::UploadResourceDto;
@@ -201,7 +201,7 @@ impl<'a> Into<GetArticleBo<'a>> for GetArticleDto {
 
 /// 访客可见的文章详情
 #[derive(Debug, Clone, Serialize)]
-pub struct VisitorArticleDetailsDto {
+pub struct VisitorArticleDetailDto {
     /// 文章ID
     pub article_id: String,
     /// 标题
@@ -230,8 +230,8 @@ pub struct VisitorArticleDetailsDto {
     pub uv: u64,
 }
 
-impl From<VisitorArticleDetailsBo> for VisitorArticleDetailsDto {
-    fn from(value: VisitorArticleDetailsBo) -> Self {
+impl From<VisitorArticleDetailBo> for VisitorArticleDetailDto {
+    fn from(value: VisitorArticleDetailBo) -> Self {
         Self {
             article_id: value.article_id,
             title: value.title,
@@ -256,7 +256,7 @@ impl From<VisitorArticleDetailsBo> for VisitorArticleDetailsDto {
 
 /// 管理员可见的文章详情
 #[derive(Debug, Clone, Serialize)]
-pub struct AdminArticleDetailsDto {
+pub struct AdminArticleDetailDto {
     /// 文章ID
     pub article_id: String,
     /// 标题
@@ -287,8 +287,8 @@ pub struct AdminArticleDetailsDto {
     pub uv: u64,
 }
 
-impl From<AdminArticleDetailsBo> for AdminArticleDetailsDto {
-    fn from(value: AdminArticleDetailsBo) -> Self {
+impl From<AdminArticleDetailBo> for AdminArticleDetailDto {
+    fn from(value: AdminArticleDetailBo) -> Self {
         Self {
             article_id: value.article_id,
             title: value.title,
@@ -315,16 +315,16 @@ impl From<AdminArticleDetailsBo> for AdminArticleDetailsDto {
 /// 文章详情
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
-pub enum ArticleDetailsDto {
-    Visitor(VisitorArticleDetailsDto),
-    Admin(AdminArticleDetailsDto),
+pub enum ArticleDetailDto {
+    Visitor(VisitorArticleDetailDto),
+    Admin(AdminArticleDetailDto),
 }
 
-impl From<ArticleDetailsBo> for ArticleDetailsDto {
-    fn from(value: ArticleDetailsBo) -> Self {
+impl From<ArticleDetailBo> for ArticleDetailDto {
+    fn from(value: ArticleDetailBo) -> Self {
         match value {
-            ArticleDetailsBo::Visitor(bo) => ArticleDetailsDto::Visitor(bo.into()),
-            ArticleDetailsBo::Admin(bo) => ArticleDetailsDto::Admin(bo.into()),
+            ArticleDetailBo::Visitor(bo) => ArticleDetailDto::Visitor(bo.into()),
+            ArticleDetailBo::Admin(bo) => ArticleDetailDto::Admin(bo.into()),
         }
     }
 }

@@ -3,7 +3,7 @@ use serde::{Serialize, Serializer};
 
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::bo::article::{
-    ArticleAttachmentBo, ArticleDetailsBo, ArticleListBo, ArticleListItemBo,
+    ArticleAttachmentBo, ArticleDetailBo, ArticleListBo, ArticleListItemBo,
 };
 use crate::model::common::article::ArticleStatus;
 use crate::model::dto::web::article::SearchArticleDto;
@@ -214,7 +214,7 @@ impl Serialize for ArticleAttachmentVo {
 
 /// 文章详情页面
 #[derive(Debug, Clone, Serialize)]
-pub struct ArticleDetailsVo {
+pub struct ArticleDetailVo {
     /// 文章ID
     pub article_id: String,
     /// 标题
@@ -245,10 +245,10 @@ pub struct ArticleDetailsVo {
     pub uv: u64,
 }
 
-impl From<ArticleDetailsBo> for ArticleDetailsVo {
-    fn from(value: ArticleDetailsBo) -> Self {
+impl From<ArticleDetailBo> for ArticleDetailVo {
+    fn from(value: ArticleDetailBo) -> Self {
         match value {
-            ArticleDetailsBo::Visitor(bo) => Self {
+            ArticleDetailBo::Visitor(bo) => Self {
                 article_id: bo.article_id,
                 title: bo.title,
                 excerpt: bo.excerpt,
@@ -268,7 +268,7 @@ impl From<ArticleDetailsBo> for ArticleDetailsVo {
                 pv: bo.pv,
                 uv: bo.uv,
             },
-            ArticleDetailsBo::Admin(bo) => Self {
+            ArticleDetailBo::Admin(bo) => Self {
                 article_id: bo.article_id,
                 title: bo.title,
                 excerpt: bo.excerpt,
@@ -292,7 +292,7 @@ impl From<ArticleDetailsBo> for ArticleDetailsVo {
     }
 }
 
-impl TemplateRenderData for ArticleDetailsVo {
+impl TemplateRenderData for ArticleDetailVo {
     fn template_name() -> &'static str {
         "article/detail.html"
     }
@@ -352,14 +352,14 @@ pub struct UpdateArticleVo {
     pub uv: u64,
 }
 
-impl TryFrom<ArticleDetailsBo> for UpdateArticleVo {
+impl TryFrom<ArticleDetailBo> for UpdateArticleVo {
     type Error = AppError;
 
-    fn try_from(value: ArticleDetailsBo) -> Result<Self, Self::Error> {
+    fn try_from(value: ArticleDetailBo) -> Result<Self, Self::Error> {
         match value {
-            ArticleDetailsBo::Visitor(_) => Err(AppErrorMeta::Internal
-                .with_context("无法将 ArticleDetailsBo::Visitor 转换为 UpdateArticleVo")),
-            ArticleDetailsBo::Admin(bo) => Ok(Self {
+            ArticleDetailBo::Visitor(_) => Err(AppErrorMeta::Internal
+                .with_context("无法将 ArticleDetailBo::Visitor 转换为 UpdateArticleVo")),
+            ArticleDetailBo::Admin(bo) => Ok(Self {
                 article_id: bo.article_id,
                 title: bo.title,
                 excerpt: bo.excerpt,

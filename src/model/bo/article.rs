@@ -147,7 +147,7 @@ pub struct GetArticleBo<'a> {
 
 /// 访客可见的文章详情
 #[derive(Debug, Clone)]
-pub struct VisitorArticleDetailsBo {
+pub struct VisitorArticleDetailBo {
     /// 文章ID
     pub article_id: String,
     /// 标题
@@ -176,7 +176,7 @@ pub struct VisitorArticleDetailsBo {
     pub uv: u64,
 }
 
-impl VisitorArticleDetailsBo {
+impl VisitorArticleDetailBo {
     pub fn from_entities(
         article: ArticlePo,
         attachments: Vec<ArticleAttachmentBo>,
@@ -202,7 +202,7 @@ impl VisitorArticleDetailsBo {
 
 /// 管理员可见的文章详情
 #[derive(Debug, Clone)]
-pub struct AdminArticleDetailsBo {
+pub struct AdminArticleDetailBo {
     /// 文章ID
     pub article_id: String,
     /// 标题
@@ -233,7 +233,7 @@ pub struct AdminArticleDetailsBo {
     pub uv: u64,
 }
 
-impl AdminArticleDetailsBo {
+impl AdminArticleDetailBo {
     pub fn from_entities(
         article: ArticlePo,
         attachments: Vec<ArticleAttachmentBo>,
@@ -260,19 +260,19 @@ impl AdminArticleDetailsBo {
 
 /// 文章详情
 #[derive(Debug, Clone)]
-pub enum ArticleDetailsBo {
-    Visitor(VisitorArticleDetailsBo),
-    Admin(AdminArticleDetailsBo),
+pub enum ArticleDetailBo {
+    Visitor(VisitorArticleDetailBo),
+    Admin(AdminArticleDetailBo),
 }
 
-impl From<VisitorArticleDetailsBo> for ArticleDetailsBo {
-    fn from(value: VisitorArticleDetailsBo) -> Self {
+impl From<VisitorArticleDetailBo> for ArticleDetailBo {
+    fn from(value: VisitorArticleDetailBo) -> Self {
         Self::Visitor(value)
     }
 }
 
-impl From<AdminArticleDetailsBo> for ArticleDetailsBo {
-    fn from(value: AdminArticleDetailsBo) -> Self {
+impl From<AdminArticleDetailBo> for ArticleDetailBo {
+    fn from(value: AdminArticleDetailBo) -> Self {
         Self::Admin(value)
     }
 }

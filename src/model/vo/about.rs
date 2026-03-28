@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::model::bo::article::ArticleDetailsBo;
+use crate::model::bo::article::ArticleDetailBo;
 use crate::model::vo::article::ArticleAttachmentVo;
 use crate::template::render::TemplateRenderData;
 
@@ -28,10 +28,10 @@ impl Default for AboutVo {
     }
 }
 
-impl From<ArticleDetailsBo> for AboutVo {
-    fn from(value: ArticleDetailsBo) -> Self {
+impl From<ArticleDetailBo> for AboutVo {
+    fn from(value: ArticleDetailBo) -> Self {
         match value {
-            ArticleDetailsBo::Visitor(bo) => Self {
+            ArticleDetailBo::Visitor(bo) => Self {
                 article_id: Some(bo.article_id),
                 markdown_content: bo.markdown_content,
                 render_content: bo.render_content,
@@ -41,7 +41,7 @@ impl From<ArticleDetailsBo> for AboutVo {
                     .map(ArticleAttachmentVo::from)
                     .collect(),
             },
-            ArticleDetailsBo::Admin(bo) => Self {
+            ArticleDetailBo::Admin(bo) => Self {
                 article_id: Some(bo.article_id),
                 markdown_content: bo.markdown_content,
                 render_content: bo.render_content,

@@ -6,10 +6,10 @@ use regex::Regex;
 
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::bo::article::{
-    AdminArticleDetailsBo, ArticleAttachmentBo, ArticleBo, ArticleDetailsBo, ArticleListBo,
+    AdminArticleDetailBo, ArticleAttachmentBo, ArticleBo, ArticleDetailBo, ArticleListBo,
     ArticleListItemBo, CreateArticleBo, DownloadArticleAttachmentBo, GetArticleBo,
     RemoveArticleAttachmentBo, RemoveArticleBo, SearchArticleBo, UnlockArticleBo, UpdateArticleBo,
-    UploadArticleAttachmentBo, VisitorArticleDetailsBo,
+    UploadArticleAttachmentBo, VisitorArticleDetailBo,
 };
 use crate::model::bo::auth::AdminBo;
 use crate::model::bo::failed_attempts::FailedAttemptsBanBo;
@@ -232,7 +232,7 @@ pub async fn get_article(
     visitor: &VisitorBo,
     bo: &GetArticleBo<'_>,
     db: &mut DbConn,
-) -> Result<Option<ArticleDetailsBo>, AppError> {
+) -> Result<Option<ArticleDetailBo>, AppError> {
     let Some(mut article) = crate::storage::db::article::find(&bo.article_id, db).await? else {
         return Ok(None);
     };
@@ -272,11 +272,11 @@ pub async fn get_article(
     refresh_article_render_content(&mut article, db).await?;
 
     if admin.is_some() {
-        let details = AdminArticleDetailsBo::from_entities(article, attachments, stats);
-        Ok(Some(ArticleDetailsBo::from(details)))
+        let detail = AdminArticleDetailBo::from_entities(article, attachments, stats);
+        Ok(Some(ArticleDetailBo::from(detail)))
     } else {
-        let details = VisitorArticleDetailsBo::from_entities(article, attachments, stats);
-        Ok(Some(ArticleDetailsBo::from(details)))
+        let detail = VisitorArticleDetailBo::from_entities(article, attachments, stats);
+        Ok(Some(ArticleDetailBo::from(detail)))
     }
 }
 
