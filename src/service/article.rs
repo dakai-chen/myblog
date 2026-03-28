@@ -1,8 +1,10 @@
 use std::borrow::Cow;
 use std::net::IpAddr;
-use std::sync::LazyLock;
+use std::sync::{Arc, LazyLock};
 
 use regex::Regex;
+use tokio::sync::Semaphore;
+use tracing::Instrument;
 
 use crate::error::{AppError, AppErrorMeta};
 use crate::model::bo::article::{
@@ -216,7 +218,7 @@ pub async fn search_article(
     let mut items = crate::storage::db::article::search(&params, offset, db).await?;
     let total = crate::storage::db::article::search_count(&params, db).await?;
 
-    batch_refresh_article_render_content(&mut items).await?;
+    RENDER_SERVICE.batch_refresh(&mut items).await?;
 
     let items = items.into_iter().map(ArticleListItemBo::from).collect();
 
@@ -269,7 +271,7 @@ pub async fn get_article(
         )));
     };
 
-    refresh_article_render_content(&mut article, db).await?;
+    RENDER_SERVICE.refresh(&mut article, db).await?;
 
     if admin.is_some() {
         let detail = AdminArticleDetailBo::from_entities(article, attachments, stats);
@@ -473,61 +475,6 @@ fn truncate_excerpt(plain_content: &str) -> String {
         .collect()
 }
 
-async fn refresh_article_render_content(
-    article: &mut ArticlePo,
-    db: &mut DbConn,
-) -> Result<(), AppError> {
-    if article.render_version != crate::markdown::version() {
-        article.render_content = crate::markdown::render(&article.markdown_content)?;
-        article.render_version = crate::markdown::version().to_owned();
-        crate::storage::db::article::update_render_content(
-            &article.id,
-            &article.render_content,
-            &article.render_version,
-            db,
-        )
-        .await?;
-    }
-    Ok(())
-}
-
-async fn batch_refresh_article_render_content(articles: &mut [ArticlePo]) -> Result<(), AppError> {
-    let current_render_version = crate::markdown::version().to_owned();
-    let mut need_update = Vec::with_capacity(articles.len());
-
-    for article in articles {
-        if article.render_version != current_render_version {
-            article.render_content = crate::markdown::render(&article.markdown_content)?;
-            article.render_version = current_render_version.clone();
-            need_update.push((article.id.clone(), article.render_content.clone()));
-        }
-    }
-
-    tokio::spawn(async move {
-        let mut db = match crate::storage::db::global_get_pool().acquire().await {
-            Ok(db) => db,
-            Err(e) => {
-                tracing::error!("批量更新文章渲染内容，获取数据库连接失败：{e}");
-                return;
-            }
-        };
-        for (id, render_content) in need_update {
-            if let Err(e) = crate::storage::db::article::update_render_content(
-                &id,
-                &render_content,
-                &current_render_version,
-                &mut db,
-            )
-            .await
-            {
-                tracing::error!("批量更新文章渲染内容失败：文章ID：{id}，{e}");
-            }
-        }
-    });
-
-    Ok(())
-}
-
 async fn check_article_accessibility(
     admin: Option<&AdminBo>,
     visitor: &VisitorBo,
@@ -548,3 +495,77 @@ async fn check_article_accessibility(
 fn is_about_article(article: &ArticlePo) -> bool {
     crate::config::get().article.about_article_id.as_deref() == Some(&article.id)
 }
+
+struct RenderService {
+    semaphore: Arc<Semaphore>,
+}
+
+impl RenderService {
+    pub fn new() -> Self {
+        Self {
+            semaphore: Arc::new(Semaphore::new(6)),
+        }
+    }
+
+    pub async fn refresh(&self, article: &mut ArticlePo, db: &mut DbConn) -> Result<(), AppError> {
+        if article.render_version != crate::markdown::version() {
+            article.render_content = crate::markdown::render(&article.markdown_content)?;
+            article.render_version = crate::markdown::version().to_owned();
+            crate::storage::db::article::update_render_content(
+                &article.id,
+                &article.render_content,
+                &article.render_version,
+                db,
+            )
+            .await?;
+        }
+        Ok(())
+    }
+
+    pub async fn batch_refresh(&self, articles: &mut [ArticlePo]) -> Result<(), AppError> {
+        let current_render_version = crate::markdown::version().to_owned();
+        let mut need_update = Vec::new();
+
+        for article in articles {
+            if article.render_version != current_render_version {
+                article.render_content = crate::markdown::render(&article.markdown_content)?;
+                article.render_version = current_render_version.clone();
+                need_update.push((article.id.clone(), article.render_content.clone()));
+            }
+        }
+
+        let Ok(permit) = self.semaphore.clone().try_acquire_owned() else {
+            tracing::debug!("文章渲染更新繁忙，跳过本次批量更新");
+            return Ok(());
+        };
+
+        let f = async move {
+            let _permit_guard = permit;
+
+            for (article_id, render_content) in need_update {
+                let mut db_conn = match crate::state::global_get().db.acquire().await {
+                    Ok(db_conn) => db_conn,
+                    Err(e) => {
+                        tracing::error!("批量更新文章渲染内容，获取数据库连接失败：{e}");
+                        return;
+                    }
+                };
+                if let Err(e) = crate::storage::db::article::update_render_content(
+                    &article_id,
+                    &render_content,
+                    &current_render_version,
+                    &mut db_conn,
+                )
+                .await
+                {
+                    tracing::error!("批量更新文章渲染内容失败：文章ID：{article_id}，{e}");
+                }
+            }
+        };
+        tokio::spawn(f.in_current_span());
+
+        Ok(())
+    }
+}
+
+static RENDER_SERVICE: LazyLock<RenderService> = LazyLock::new(RenderService::new);

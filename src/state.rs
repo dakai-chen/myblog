@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, OnceLock};
 
 use crate::config::AppConfig;
 use crate::storage::db::DbPool;
@@ -19,4 +19,16 @@ impl AppState {
             template: crate::template::build_template(&config.theme)?,
         }))
     }
+}
+
+static APP_STATE: OnceLock<Arc<AppState>> = OnceLock::new();
+
+pub fn global_init(state: Arc<AppState>) -> anyhow::Result<()> {
+    APP_STATE
+        .set(state)
+        .map_err(|_| anyhow::anyhow!("重复初始化全局应用状态"))
+}
+
+pub fn global_get() -> &'static Arc<AppState> {
+    APP_STATE.get().expect("全局应用状态未初始化")
 }
