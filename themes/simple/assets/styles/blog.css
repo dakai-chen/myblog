@@ -270,7 +270,7 @@ a.btn:active {
     color: var(--color-menu-delimiter);
 }
 
-.menu .disabled {
+.menu > li span {
     color: var(--color-menu-disabled);
 }
 
